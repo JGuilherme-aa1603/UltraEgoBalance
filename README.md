@@ -22,6 +22,33 @@ O Instinto Superior representa controle, eficiência e sobrevivência. O Ultra E
 - Sair da forma ou morrer zera o medidor.
 - VIT é ajustado para x1,60 e o consumo de stamina para 0,045 apenas em memória; nenhum JSON original é alterado.
 
+## Técnicas de Destruição — versão 1.1.0
+
+### Hakai — tecla H
+
+- Exige 70 pontos de Ego e consome 35% do Ki máximo.
+- Alcance de 24 blocos e cooldown de 30 segundos.
+- Causa 18% da vida máxima do alvo como dano que ignora armadura e escudo.
+- Contra jogadores causa 12% e nunca executa.
+- Finaliza criaturas comuns abaixo de 15% de vida.
+- Jogadores criativos/espectadores, pets domesticados e entidades marcadas como chefes pelo Forge não podem ser apagados.
+
+### Esfera da Destruição — tecla J
+
+- Inspirada na esfera usada por Vegeta contra Granolah.
+- Exige 50 pontos de Ego, consome 25% do Ki máximo e possui cooldown de 12 segundos.
+- Viaja até o ponto mirado, com núcleo e órbitas de energia roxa animadas.
+- Detona numa área de cinco blocos, com dano proporcional à vida e redução pela distância do centro.
+- Nunca destrói blocos. Dano contra outros jogadores vem desativado por padrão.
+
+### Aura da Destruição
+
+- Começa a se manifestar a partir de 80 pontos de Ego.
+- A chance de apagar projéteis inimigos cresce até 40% com o medidor cheio.
+- Cada projétil apagado consome cinco pontos de Ego, impedindo defesa gratuita infinita.
+
+As teclas podem ser alteradas normalmente em **Opções → Controles → Ultra Balance Tweaks**. O HUD mostra requisitos e cooldowns em tempo real abaixo do medidor de Ego.
+
 ## Instinto Superior
 
 - A esquiva fixa original é substituída por uma chance dependente da maestria e da porcentagem atual de Ki.
