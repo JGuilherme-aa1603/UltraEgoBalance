@@ -22,14 +22,16 @@ O Instinto Superior representa controle, eficiência e sobrevivência. O Ultra E
 - Sair da forma ou morrer zera o medidor.
 - VIT é ajustado para x1,60 e o consumo de stamina para 0,045 apenas em memória; nenhum JSON original é alterado.
 
-## Técnicas de Destruição — versão 1.1.0
+## Técnicas de Destruição — versão 1.2.0
 
 ### Hakai — tecla H
 
 - Exige 70 pontos de Ego e consome 35% do Ki máximo.
 - Alcance de 24 blocos e cooldown de 30 segundos.
-- Causa 18% da vida máxima do alvo como dano que ignora armadura e escudo.
-- Contra jogadores causa 12% e nunca executa.
+- Usa um projétil de Ki nativo do DragonMineZ, com shader, cores, colisão, som e impacto do próprio mod.
+- O dano escala com o atributo de dano de Ki do personagem transformado (x5 por padrão), em vez de ignorar o nível do jogador.
+- Garante um piso de 35% da vida contra criaturas e 18% contra jogadores, além de um mínimo absoluto de 40 de dano; jogadores nunca são executados.
+- Persegue o alvo marcado, possui 100% de penetração de armadura da técnica e não destrói blocos.
 - Finaliza criaturas comuns abaixo de 15% de vida.
 - Jogadores criativos/espectadores, pets domesticados e entidades marcadas como chefes pelo Forge não podem ser apagados.
 
@@ -37,8 +39,9 @@ O Instinto Superior representa controle, eficiência e sobrevivência. O Ultra E
 
 - Inspirada na esfera usada por Vegeta contra Granolah.
 - Exige 50 pontos de Ego, consome 25% do Ki máximo e possui cooldown de 12 segundos.
-- Viaja até o ponto mirado, com núcleo e órbitas de energia roxa animadas.
-- Detona numa área de cinco blocos, com dano proporcional à vida e redução pela distância do centro.
+- É uma Death Ball nativa do DragonMineZ recolorida e recalibrada: forma-se acima do jogador, usa o shader de Ki do mod, dispara na direção da mira e produz a explosão nativa.
+- O dano escala com o dano de Ki transformado (x3,5 por padrão) e é aplicado em área; o mínimo absoluto é 24 de dano.
+- Tamanho padrão 3,35, resultando em raio de explosão próximo de cinco blocos.
 - Nunca destrói blocos. Dano contra outros jogadores vem desativado por padrão.
 
 ### Aura da Destruição
@@ -82,7 +85,7 @@ O Forge gera estes arquivos na primeira inicialização:
 
 ## Segurança e reversão
 
-Os JARs e os JSONs dos mods originais nunca são sobrescritos. Remover `ultrabalancetweaks-1.0.0.jar` restaura os handlers e os atributos originais.
+Os JARs e os JSONs dos mods originais nunca são sobrescritos. Remover o JAR `ultrabalancetweaks` restaura os handlers e os atributos originais.
 
 ## Compilação
 

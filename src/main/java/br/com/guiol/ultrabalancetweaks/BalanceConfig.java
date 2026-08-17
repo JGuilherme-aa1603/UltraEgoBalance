@@ -19,18 +19,21 @@ public final class BalanceConfig {
     public static final ForgeConfigSpec.DoubleValue HAKAI_KI_COST;
     public static final ForgeConfigSpec.IntValue HAKAI_COOLDOWN_TICKS;
     public static final ForgeConfigSpec.DoubleValue HAKAI_RANGE;
-    public static final ForgeConfigSpec.DoubleValue HAKAI_DAMAGE_RATIO;
-    public static final ForgeConfigSpec.DoubleValue HAKAI_PLAYER_DAMAGE_RATIO;
+    public static final ForgeConfigSpec.DoubleValue HAKAI_KI_DAMAGE_MULTIPLIER;
+    public static final ForgeConfigSpec.DoubleValue HAKAI_MINIMUM_DAMAGE;
+    public static final ForgeConfigSpec.DoubleValue HAKAI_DAMAGE_FLOOR;
+    public static final ForgeConfigSpec.DoubleValue HAKAI_PLAYER_DAMAGE_FLOOR;
     public static final ForgeConfigSpec.DoubleValue HAKAI_EXECUTION_THRESHOLD;
     public static final ForgeConfigSpec.BooleanValue HAKAI_EXECUTION_ENABLED;
     public static final ForgeConfigSpec.DoubleValue SPHERE_REQUIRED_EGO;
     public static final ForgeConfigSpec.DoubleValue SPHERE_KI_COST;
     public static final ForgeConfigSpec.IntValue SPHERE_COOLDOWN_TICKS;
     public static final ForgeConfigSpec.DoubleValue SPHERE_RANGE;
-    public static final ForgeConfigSpec.DoubleValue SPHERE_RADIUS;
-    public static final ForgeConfigSpec.DoubleValue SPHERE_DAMAGE_RATIO;
-    public static final ForgeConfigSpec.DoubleValue SPHERE_PLAYER_DAMAGE_RATIO;
-    public static final ForgeConfigSpec.IntValue SPHERE_TRAVEL_TICKS;
+    public static final ForgeConfigSpec.DoubleValue SPHERE_KI_DAMAGE_MULTIPLIER;
+    public static final ForgeConfigSpec.DoubleValue SPHERE_MINIMUM_DAMAGE;
+    public static final ForgeConfigSpec.DoubleValue SPHERE_SIZE;
+    public static final ForgeConfigSpec.DoubleValue SPHERE_SPEED;
+    public static final ForgeConfigSpec.IntValue SPHERE_CHARGE_TICKS;
     public static final ForgeConfigSpec.BooleanValue SPHERE_AFFECTS_PLAYERS;
     public static final ForgeConfigSpec.DoubleValue AURA_REQUIRED_EGO;
     public static final ForgeConfigSpec.DoubleValue AURA_MAX_ERASURE_CHANCE;
@@ -85,16 +88,20 @@ public final class BalanceConfig {
                 .defineInRange("hakai_cooldown_ticks", 600, 0, 72000);
         HAKAI_RANGE = commonDecimal("hakai_range", 24.0, 2.0, 128.0,
                 "Maximum target distance in blocks.");
-        HAKAI_DAMAGE_RATIO = commonDecimal("hakai_damage_ratio", 0.18, 0.0, 1.0,
-                "Fraction of a non-player target's maximum health dealt as armor-bypassing damage.");
-        HAKAI_PLAYER_DAMAGE_RATIO = commonDecimal("hakai_player_damage_ratio", 0.12, 0.0, 1.0,
-                "Fraction of a player's maximum health dealt by Hakai. Players are never executed.");
+        HAKAI_KI_DAMAGE_MULTIPLIER = commonDecimal("hakai_ki_damage_multiplier", 5.0, 0.1, 100.0,
+                "Multiplier applied to DragonMineZ's transformed Ki damage. The native projectile may hit directly and again in its compact blast.");
+        HAKAI_MINIMUM_DAMAGE = commonDecimal("hakai_minimum_damage", 40.0, 1.0, 1000000.0,
+                "Absolute minimum damage, ensuring the technique remains lethal to ordinary vanilla mobs even with unusual stat configs.");
+        HAKAI_DAMAGE_FLOOR = commonDecimal("hakai_damage_floor", 0.35, 0.0, 1.0,
+                "Minimum fraction of a non-player target's maximum health dealt after DragonMineZ scaling.");
+        HAKAI_PLAYER_DAMAGE_FLOOR = commonDecimal("hakai_player_damage_floor", 0.18, 0.0, 1.0,
+                "Minimum fraction of a player's maximum health dealt. Players are never executed.");
         HAKAI_EXECUTION_THRESHOLD = commonDecimal("hakai_execution_threshold", 0.15, 0.0, 1.0,
                 "Non-boss execution threshold as a fraction of current health.");
         HAKAI_EXECUTION_ENABLED = COMMON_BUILDER.comment("Allow Hakai to finish eligible non-player targets below the threshold.")
                 .define("hakai_execution_enabled", true);
 
-        COMMON_BUILDER.comment("Sphere of Destruction is a traveling, non-griefing area attack.");
+        COMMON_BUILDER.comment("Sphere of Destruction uses DragonMineZ's native Death Ball entity, renderer, collision and explosion. Block destruction remains disabled.");
         SPHERE_REQUIRED_EGO = commonDecimal("sphere_required_ego", 50.0, 0.0, 100.0,
                 "Minimum Ego gauge required to launch a Sphere of Destruction.");
         SPHERE_KI_COST = commonDecimal("sphere_ki_cost", 0.25, 0.0, 1.0,
@@ -102,15 +109,17 @@ public final class BalanceConfig {
         SPHERE_COOLDOWN_TICKS = COMMON_BUILDER.comment("Sphere cooldown in ticks.")
                 .defineInRange("sphere_cooldown_ticks", 240, 0, 72000);
         SPHERE_RANGE = commonDecimal("sphere_range", 32.0, 2.0, 128.0,
-                "Maximum aimed distance in blocks.");
-        SPHERE_RADIUS = commonDecimal("sphere_radius", 5.0, 1.0, 24.0,
-                "Explosion radius. Blocks are never damaged.");
-        SPHERE_DAMAGE_RATIO = commonDecimal("sphere_damage_ratio", 0.10, 0.0, 1.0,
-                "Fraction of maximum health dealt to non-player targets in the blast.");
-        SPHERE_PLAYER_DAMAGE_RATIO = commonDecimal("sphere_player_damage_ratio", 0.07, 0.0, 1.0,
-                "Fraction of maximum health dealt to players in the blast.");
-        SPHERE_TRAVEL_TICKS = COMMON_BUILDER.comment("Visual travel time before the sphere detonates.")
-                .defineInRange("sphere_travel_ticks", 16, 1, 200);
+                "Maximum projectile travel distance in blocks before it dissipates.");
+        SPHERE_KI_DAMAGE_MULTIPLIER = commonDecimal("sphere_ki_damage_multiplier", 3.5, 0.1, 100.0,
+                "Multiplier applied to DragonMineZ's transformed Ki damage for every target in the native explosion.");
+        SPHERE_MINIMUM_DAMAGE = commonDecimal("sphere_minimum_damage", 24.0, 1.0, 1000000.0,
+                "Absolute minimum damage. Normal damage at developed levels is much higher because it scales with Ki damage.");
+        SPHERE_SIZE = commonDecimal("sphere_size", 3.35, 0.5, 12.0,
+                "Native Death Ball visual size. Explosion radius is approximately 1.5 times this value.");
+        SPHERE_SPEED = commonDecimal("sphere_speed", 1.15, 0.1, 5.0,
+                "Native projectile speed in blocks per tick.");
+        SPHERE_CHARGE_TICKS = COMMON_BUILDER.comment("Ticks spent charging the sphere above the player before it fires.")
+                .defineInRange("sphere_charge_ticks", 14, 0, 200);
         SPHERE_AFFECTS_PLAYERS = COMMON_BUILDER.comment("Allow the sphere to damage other players.")
                 .define("sphere_affects_players", false);
 

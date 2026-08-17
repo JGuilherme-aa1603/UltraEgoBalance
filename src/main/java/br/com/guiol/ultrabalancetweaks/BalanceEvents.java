@@ -30,9 +30,13 @@ public final class BalanceEvents {
         FormTuning.apply();
     }
 
-    @SubscribeEvent
-    public void onServerTick(TickEvent.ServerTickEvent event) {
-        DestructionAbilities.tickSpheres(event);
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public void protectPlayersFromSphere(LivingAttackEvent event) {
+        if (!BalanceConfig.SPHERE_AFFECTS_PLAYERS.get()
+                && event.getEntity() instanceof Player
+                && DestructionAbilities.isSphereProjectile(event.getSource().getDirectEntity())) {
+            event.setCanceled(true);
+        }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -120,11 +124,6 @@ public final class BalanceEvents {
         if (event.isCanceled() || event.getAmount() <= 0.0f) {
             return;
         }
-        if (DestructionAbilities.isDestructionDamage(event.getSource())) {
-            neutralizeOriginalUltraEgoBuffs(event);
-            return;
-        }
-
         Entity sourceEntity = event.getSource().getEntity();
         if (sourceEntity instanceof ServerPlayer attacker && attacker != event.getEntity()) {
             DmzForms.ActiveForm attackerForm = DmzForms.active(attacker);
@@ -144,6 +143,8 @@ public final class BalanceEvents {
                         * BalanceConfig.EGO_DAMAGE_TAKEN_MULTIPLIER.get() / originalMultiplier));
             }
         }
+
+        DestructionAbilities.adjustNativeDestructionDamage(event);
     }
 
     @SubscribeEvent
@@ -215,22 +216,6 @@ public final class BalanceEvents {
         double egoRatio = EgoData.gauge(attacker) / 100.0;
         double newMultiplier = lerp(1.05, BalanceConfig.EGO_MAX_DAMAGE_MULTIPLIER.get(), egoRatio);
         event.setAmount((float) (event.getAmount() / originalMultiplier * newMultiplier));
-    }
-
-    private static void neutralizeOriginalUltraEgoBuffs(LivingHurtEvent event) {
-        if (!UnofficialDMZConfig.SPECIAL_FORM_BUFFS.get()) {
-            return;
-        }
-        double multiplier = 1.0;
-        Entity sourceEntity = event.getSource().getEntity();
-        if (sourceEntity instanceof ServerPlayer attacker && DmzForms.isUltraEgo(attacker)) {
-            double missingHealth = 1.0 - attacker.getHealth() / Math.max(1.0f, attacker.getMaxHealth());
-            multiplier *= 1.05 + 0.30 * missingHealth;
-        }
-        if (event.getEntity() instanceof ServerPlayer victim && DmzForms.isUltraEgo(victim)) {
-            multiplier *= 0.95;
-        }
-        event.setAmount((float) (event.getAmount() / multiplier));
     }
 
     private static void applyUltraInstinctPrecision(LivingHurtEvent event, ServerPlayer attacker,

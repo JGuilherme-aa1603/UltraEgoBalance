@@ -16,6 +16,8 @@
   "message.ultrabalancetweaks.protected_target": "This target resists annihilation.",
   "message.ultrabalancetweaks.hakai_erased": "%s was erased by Hakai.",
   "message.ultrabalancetweaks.hakai_hit": "Destruction energy struck %s.",
+  "message.ultrabalancetweaks.hakai_launched": "Hakai launched at %s!",
+  "message.ultrabalancetweaks.sphere_charging": "Sphere of Destruction forming...",
   "message.ultrabalancetweaks.sphere_launched": "Sphere of Destruction launched!",
   "death.attack.destruction": "%1$s was consumed by Destruction energy",
   "death.attack.destruction.player": "%1$s was erased by %2$s"

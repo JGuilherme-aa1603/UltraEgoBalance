@@ -16,6 +16,8 @@
   "message.ultrabalancetweaks.protected_target": "Este alvo resiste à aniquilação.",
   "message.ultrabalancetweaks.hakai_erased": "%s foi apagado pelo Hakai.",
   "message.ultrabalancetweaks.hakai_hit": "Energia da Destruição atingiu %s.",
+  "message.ultrabalancetweaks.hakai_launched": "Hakai lançado contra %s!",
+  "message.ultrabalancetweaks.sphere_charging": "Esfera da Destruição em formação...",
   "message.ultrabalancetweaks.sphere_launched": "Esfera da Destruição lançada!",
   "death.attack.destruction": "%1$s foi consumido pela energia da Destruição",
   "death.attack.destruction.player": "%1$s foi apagado por %2$s"
