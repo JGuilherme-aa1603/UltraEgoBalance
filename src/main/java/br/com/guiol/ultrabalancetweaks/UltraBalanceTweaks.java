@@ -18,6 +18,6 @@ public final class UltraBalanceTweaks {
         context.registerConfig(ModConfig.Type.CLIENT, BalanceConfig.CLIENT_SPEC);
         BalanceNetwork.register();
         MinecraftForge.EVENT_BUS.register(new BalanceEvents());
-        LOGGER.info("Ultra Balance Tweaks loaded: cumulative Ultra Ego and Ki-scaled Ultra Instinct enabled");
+        LOGGER.info("Ultra Balance Tweaks loaded: cumulative Ultra Ego, Destruction techniques and Ki-scaled Ultra Instinct enabled");
     }
 }

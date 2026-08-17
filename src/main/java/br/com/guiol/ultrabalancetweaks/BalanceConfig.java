@@ -15,6 +15,26 @@ public final class BalanceConfig {
     public static final ForgeConfigSpec.DoubleValue EGO_DECAY_PER_SECOND;
     public static final ForgeConfigSpec.DoubleValue EGO_VIT_MULTIPLIER;
     public static final ForgeConfigSpec.DoubleValue EGO_STAMINA_DRAIN;
+    public static final ForgeConfigSpec.DoubleValue HAKAI_REQUIRED_EGO;
+    public static final ForgeConfigSpec.DoubleValue HAKAI_KI_COST;
+    public static final ForgeConfigSpec.IntValue HAKAI_COOLDOWN_TICKS;
+    public static final ForgeConfigSpec.DoubleValue HAKAI_RANGE;
+    public static final ForgeConfigSpec.DoubleValue HAKAI_DAMAGE_RATIO;
+    public static final ForgeConfigSpec.DoubleValue HAKAI_PLAYER_DAMAGE_RATIO;
+    public static final ForgeConfigSpec.DoubleValue HAKAI_EXECUTION_THRESHOLD;
+    public static final ForgeConfigSpec.BooleanValue HAKAI_EXECUTION_ENABLED;
+    public static final ForgeConfigSpec.DoubleValue SPHERE_REQUIRED_EGO;
+    public static final ForgeConfigSpec.DoubleValue SPHERE_KI_COST;
+    public static final ForgeConfigSpec.IntValue SPHERE_COOLDOWN_TICKS;
+    public static final ForgeConfigSpec.DoubleValue SPHERE_RANGE;
+    public static final ForgeConfigSpec.DoubleValue SPHERE_RADIUS;
+    public static final ForgeConfigSpec.DoubleValue SPHERE_DAMAGE_RATIO;
+    public static final ForgeConfigSpec.DoubleValue SPHERE_PLAYER_DAMAGE_RATIO;
+    public static final ForgeConfigSpec.IntValue SPHERE_TRAVEL_TICKS;
+    public static final ForgeConfigSpec.BooleanValue SPHERE_AFFECTS_PLAYERS;
+    public static final ForgeConfigSpec.DoubleValue AURA_REQUIRED_EGO;
+    public static final ForgeConfigSpec.DoubleValue AURA_MAX_ERASURE_CHANCE;
+    public static final ForgeConfigSpec.DoubleValue AURA_EGO_COST;
 
     public static final DodgeTuning SIGN_DODGE;
     public static final DodgeTuning MASTERED_DODGE;
@@ -28,6 +48,7 @@ public final class BalanceConfig {
     public static final ForgeConfigSpec.IntValue HUD_Y_OFFSET;
     public static final ForgeConfigSpec.IntValue HUD_WIDTH;
     public static final ForgeConfigSpec.BooleanValue HUD_SHOW_NUMERIC_VALUE;
+    public static final ForgeConfigSpec.BooleanValue HUD_SHOW_ABILITIES;
 
     public static final ForgeConfigSpec COMMON_SPEC;
     public static final ForgeConfigSpec CLIENT_SPEC;
@@ -54,6 +75,54 @@ public final class BalanceConfig {
                 "Runtime stamina drain. The DragonMineZ JSON is never overwritten.");
         COMMON_BUILDER.pop();
 
+        COMMON_BUILDER.push("destruction");
+        COMMON_BUILDER.comment("Hakai is a precise finisher. It cannot execute players, tamed pets or entities tagged forge:bosses.");
+        HAKAI_REQUIRED_EGO = commonDecimal("hakai_required_ego", 70.0, 0.0, 100.0,
+                "Minimum Ego gauge required to use Hakai.");
+        HAKAI_KI_COST = commonDecimal("hakai_ki_cost", 0.35, 0.0, 1.0,
+                "Fraction of maximum Ki consumed by Hakai.");
+        HAKAI_COOLDOWN_TICKS = COMMON_BUILDER.comment("Hakai cooldown in ticks.")
+                .defineInRange("hakai_cooldown_ticks", 600, 0, 72000);
+        HAKAI_RANGE = commonDecimal("hakai_range", 24.0, 2.0, 128.0,
+                "Maximum target distance in blocks.");
+        HAKAI_DAMAGE_RATIO = commonDecimal("hakai_damage_ratio", 0.18, 0.0, 1.0,
+                "Fraction of a non-player target's maximum health dealt as armor-bypassing damage.");
+        HAKAI_PLAYER_DAMAGE_RATIO = commonDecimal("hakai_player_damage_ratio", 0.12, 0.0, 1.0,
+                "Fraction of a player's maximum health dealt by Hakai. Players are never executed.");
+        HAKAI_EXECUTION_THRESHOLD = commonDecimal("hakai_execution_threshold", 0.15, 0.0, 1.0,
+                "Non-boss execution threshold as a fraction of current health.");
+        HAKAI_EXECUTION_ENABLED = COMMON_BUILDER.comment("Allow Hakai to finish eligible non-player targets below the threshold.")
+                .define("hakai_execution_enabled", true);
+
+        COMMON_BUILDER.comment("Sphere of Destruction is a traveling, non-griefing area attack.");
+        SPHERE_REQUIRED_EGO = commonDecimal("sphere_required_ego", 50.0, 0.0, 100.0,
+                "Minimum Ego gauge required to launch a Sphere of Destruction.");
+        SPHERE_KI_COST = commonDecimal("sphere_ki_cost", 0.25, 0.0, 1.0,
+                "Fraction of maximum Ki consumed by the sphere.");
+        SPHERE_COOLDOWN_TICKS = COMMON_BUILDER.comment("Sphere cooldown in ticks.")
+                .defineInRange("sphere_cooldown_ticks", 240, 0, 72000);
+        SPHERE_RANGE = commonDecimal("sphere_range", 32.0, 2.0, 128.0,
+                "Maximum aimed distance in blocks.");
+        SPHERE_RADIUS = commonDecimal("sphere_radius", 5.0, 1.0, 24.0,
+                "Explosion radius. Blocks are never damaged.");
+        SPHERE_DAMAGE_RATIO = commonDecimal("sphere_damage_ratio", 0.10, 0.0, 1.0,
+                "Fraction of maximum health dealt to non-player targets in the blast.");
+        SPHERE_PLAYER_DAMAGE_RATIO = commonDecimal("sphere_player_damage_ratio", 0.07, 0.0, 1.0,
+                "Fraction of maximum health dealt to players in the blast.");
+        SPHERE_TRAVEL_TICKS = COMMON_BUILDER.comment("Visual travel time before the sphere detonates.")
+                .defineInRange("sphere_travel_ticks", 16, 1, 200);
+        SPHERE_AFFECTS_PLAYERS = COMMON_BUILDER.comment("Allow the sphere to damage other players.")
+                .define("sphere_affects_players", false);
+
+        COMMON_BUILDER.comment("At high Ego, the destruction aura can erase incoming projectiles.");
+        AURA_REQUIRED_EGO = commonDecimal("aura_required_ego", 80.0, 0.0, 100.0,
+                "Gauge at which projectile erasure begins. Chance scales from zero here to its maximum at 100.");
+        AURA_MAX_ERASURE_CHANCE = commonDecimal("aura_max_erasure_chance", 0.40, 0.0, 1.0,
+                "Projectile erasure chance at 100 Ego.");
+        AURA_EGO_COST = commonDecimal("aura_ego_cost", 5.0, 0.0, 100.0,
+                "Ego gauge consumed when the aura erases a projectile.");
+        COMMON_BUILDER.pop();
+
         COMMON_BUILDER.push("ultra_instinct");
         COMMON_BUILDER.comment("Dodge is interpolated by mastery, then by the fraction of Ki currently available.");
         SIGN_DODGE = dodge("sign", 0.20, 0.25, 0.45, 0.60, 0.022, 0.018);
@@ -73,6 +142,8 @@ public final class BalanceConfig {
         HUD_Y_OFFSET = CLIENT_BUILDER.comment("Vertical offset from the default position above the hotbar.").defineInRange("y_offset", 0, -4096, 4096);
         HUD_WIDTH = CLIENT_BUILDER.comment("Gauge width in GUI pixels.").defineInRange("width", 142, 90, 320);
         HUD_SHOW_NUMERIC_VALUE = CLIENT_BUILDER.comment("Show the exact percentage inside the gauge.").define("show_numeric_value", true);
+        HUD_SHOW_ABILITIES = CLIENT_BUILDER.comment("Show Hakai and Sphere of Destruction readiness below the gauge.")
+                .define("show_abilities", true);
         CLIENT_BUILDER.pop();
         CLIENT_SPEC = CLIENT_BUILDER.build();
     }

@@ -30,6 +30,23 @@ public final class BalanceEvents {
         FormTuning.apply();
     }
 
+    @SubscribeEvent
+    public void onServerTick(TickEvent.ServerTickEvent event) {
+        DestructionAbilities.tickSpheres(event);
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public void onDestructionAura(LivingAttackEvent event) {
+        if (event.isCanceled() || !(event.getEntity() instanceof ServerPlayer victim)
+                || !DmzForms.isUltraEgo(victim)) {
+            return;
+        }
+        Entity directEntity = event.getSource().getDirectEntity();
+        if (directEntity != null && DestructionAbilities.tryEraseProjectile(victim, directEntity)) {
+            event.setCanceled(true);
+        }
+    }
+
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onUltraInstinctAttack(LivingAttackEvent event) {
         if (event.isCanceled()) {
@@ -103,6 +120,10 @@ public final class BalanceEvents {
         if (event.isCanceled() || event.getAmount() <= 0.0f) {
             return;
         }
+        if (DestructionAbilities.isDestructionDamage(event.getSource())) {
+            neutralizeOriginalUltraEgoBuffs(event);
+            return;
+        }
 
         Entity sourceEntity = event.getSource().getEntity();
         if (sourceEntity instanceof ServerPlayer attacker && attacker != event.getEntity()) {
@@ -165,6 +186,9 @@ public final class BalanceEvents {
         if (EgoData.shouldSync(player, active, gauge)) {
             BalanceNetwork.syncEgo(player, active, gauge);
         }
+        if (player.tickCount % 10 == 0) {
+            BalanceNetwork.syncDestruction(player);
+        }
     }
 
     @SubscribeEvent
@@ -172,6 +196,7 @@ public final class BalanceEvents {
         if (event.getEntity() instanceof ServerPlayer player) {
             boolean active = DmzForms.isUltraEgo(player);
             BalanceNetwork.syncEgo(player, active, active ? EgoData.gauge(player) : 0.0f);
+            BalanceNetwork.syncDestruction(player);
         }
     }
 
@@ -190,6 +215,22 @@ public final class BalanceEvents {
         double egoRatio = EgoData.gauge(attacker) / 100.0;
         double newMultiplier = lerp(1.05, BalanceConfig.EGO_MAX_DAMAGE_MULTIPLIER.get(), egoRatio);
         event.setAmount((float) (event.getAmount() / originalMultiplier * newMultiplier));
+    }
+
+    private static void neutralizeOriginalUltraEgoBuffs(LivingHurtEvent event) {
+        if (!UnofficialDMZConfig.SPECIAL_FORM_BUFFS.get()) {
+            return;
+        }
+        double multiplier = 1.0;
+        Entity sourceEntity = event.getSource().getEntity();
+        if (sourceEntity instanceof ServerPlayer attacker && DmzForms.isUltraEgo(attacker)) {
+            double missingHealth = 1.0 - attacker.getHealth() / Math.max(1.0f, attacker.getMaxHealth());
+            multiplier *= 1.05 + 0.30 * missingHealth;
+        }
+        if (event.getEntity() instanceof ServerPlayer victim && DmzForms.isUltraEgo(victim)) {
+            multiplier *= 0.95;
+        }
+        event.setAmount((float) (event.getAmount() / multiplier));
     }
 
     private static void applyUltraInstinctPrecision(LivingHurtEvent event, ServerPlayer attacker,

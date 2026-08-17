@@ -62,6 +62,12 @@ public final class EgoHudOverlay {
             graphics.fill(segmentX, y, segmentX + 1, y + barHeight, argb(110, 15, 3, 24));
         }
 
+        if (gauge >= ClientDestructionState.auraRequirement()) {
+            Component aura = Component.translatable("gui.ultrabalancetweaks.aura");
+            graphics.drawString(minecraft.font, aura, x + width - minecraft.font.width(aura) - 2,
+                    y + 1, 0xFFF0B6, true);
+        }
+
         Component title = Component.translatable(gauge >= 99.95f
                 ? "gui.ultrabalancetweaks.ego_full" : "gui.ultrabalancetweaks.ego");
         String label = title.getString();
@@ -70,6 +76,40 @@ public final class EgoHudOverlay {
         }
         int textColor = gauge >= 95.0f ? 0xFFF0B6 : 0xE9C8FF;
         graphics.drawCenteredString(minecraft.font, label, x + width / 2, y - 11, textColor);
+
+        if (BalanceConfig.HUD_SHOW_ABILITIES.get()) {
+            int gap = 4;
+            int chipWidth = (width - gap) / 2;
+            drawAbilityChip(graphics, minecraft, x, y + barHeight + 5, chipWidth,
+                    DestructionKeybinds.hakaiKey(), Component.translatable("gui.ultrabalancetweaks.hakai_short"),
+                    gauge, ClientDestructionState.hakaiRequirement(), ClientDestructionState.hakaiCooldown());
+            drawAbilityChip(graphics, minecraft, x + chipWidth + gap, y + barHeight + 5, chipWidth,
+                    DestructionKeybinds.sphereKey(), Component.translatable("gui.ultrabalancetweaks.sphere_short"),
+                    gauge, ClientDestructionState.sphereRequirement(), ClientDestructionState.sphereCooldown());
+        }
+    }
+
+    private static void drawAbilityChip(GuiGraphics graphics, Minecraft minecraft, int x, int y, int width,
+                                        Component key, Component name, float gauge, float requirement, int cooldown) {
+        boolean unlocked = gauge + 1.0E-3f >= requirement;
+        boolean ready = unlocked && cooldown <= 0;
+        int border = ready ? argb(220, 215, 72, 255)
+                : unlocked ? argb(210, 132, 72, 171) : argb(180, 70, 54, 79);
+        int textColor = ready ? 0xFFF0B6 : unlocked ? 0xD9B6E8 : 0x887A91;
+        graphics.fill(x, y, x + width, y + 11, argb(155, 8, 2, 13));
+        graphics.fill(x + 1, y + 1, x + width - 1, y + 10, border);
+        graphics.fill(x + 2, y + 2, x + width - 2, y + 9, argb(235, 24, 7, 34));
+
+        String status;
+        if (!unlocked) {
+            status = "E" + Math.round(requirement);
+        } else if (cooldown > 0) {
+            status = (int) Math.ceil(cooldown / 20.0) + "s";
+        } else {
+            status = Component.translatable("gui.ultrabalancetweaks.ready_short").getString();
+        }
+        String text = key.getString() + " " + name.getString() + " " + status;
+        graphics.drawCenteredString(minecraft.font, text, x + width / 2, y + 2, textColor);
     }
 
     private static int argb(int alpha, int red, int green, int blue) {

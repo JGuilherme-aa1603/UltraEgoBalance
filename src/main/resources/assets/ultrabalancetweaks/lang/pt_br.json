@@ -1,4 +1,22 @@
 {
   "gui.ultrabalancetweaks.ego": "ULTRA EGO",
-  "gui.ultrabalancetweaks.ego_full": "DESTRUIÇÃO LIBERADA"
+  "gui.ultrabalancetweaks.ego_full": "DESTRUIÇÃO LIBERADA",
+  "gui.ultrabalancetweaks.aura": "AURA",
+  "gui.ultrabalancetweaks.hakai_short": "HAKAI",
+  "gui.ultrabalancetweaks.sphere_short": "ESFERA",
+  "gui.ultrabalancetweaks.ready_short": "OK",
+  "key.categories.ultrabalancetweaks": "Ultra Balance Tweaks",
+  "key.ultrabalancetweaks.hakai": "Hakai",
+  "key.ultrabalancetweaks.sphere": "Esfera da Destruição",
+  "message.ultrabalancetweaks.requires_ultra_ego": "O poder da Destruição exige o Ultra Ego.",
+  "message.ultrabalancetweaks.requires_ego": "Ego insuficiente: é necessário %s%%.",
+  "message.ultrabalancetweaks.cooldown": "Técnica disponível em %ss.",
+  "message.ultrabalancetweaks.not_enough_ki": "Ki insuficiente para controlar a Destruição.",
+  "message.ultrabalancetweaks.no_target": "Nenhum alvo na mira do Hakai.",
+  "message.ultrabalancetweaks.protected_target": "Este alvo resiste à aniquilação.",
+  "message.ultrabalancetweaks.hakai_erased": "%s foi apagado pelo Hakai.",
+  "message.ultrabalancetweaks.hakai_hit": "Energia da Destruição atingiu %s.",
+  "message.ultrabalancetweaks.sphere_launched": "Esfera da Destruição lançada!",
+  "death.attack.destruction": "%1$s foi consumido pela energia da Destruição",
+  "death.attack.destruction.player": "%1$s foi apagado por %2$s"
 }
