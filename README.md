@@ -22,7 +22,9 @@ O Instinto Superior representa controle, eficiência e sobrevivência. O Ultra E
 - Sair da forma ou morrer zera o medidor.
 - VIT é ajustado para x1,60 e o consumo de stamina para 0,045 apenas em memória; nenhum JSON original é alterado.
 
-## Técnicas de Destruição — versão 1.2.0
+## Técnicas de Destruição — versão 1.3.0
+
+Ao alcançar **100 de maestria no Ultra Ego**, Hakai e Esfera da Destruição são aprendidos permanentemente e passam a funcionar também na forma base. Na base eles usam o dano de Ki não transformado e dispensam o medidor de Ego, mas conservam o custo de Ki, cooldown e todas as proteções. Durante o Ultra Ego, continuam exigindo o nível configurado do medidor. As técnicas não podem ser usadas sobre outra transformação.
 
 ### Hakai — tecla H
 
@@ -54,19 +56,28 @@ As teclas podem ser alteradas normalmente em **Opções → Controles → Ultra 
 
 ## Instinto Superior
 
-- A esquiva fixa original é substituída por uma chance dependente da maestria e da porcentagem atual de Ki.
-- Cada esquiva bem-sucedida consome uma porcentagem do Ki máximo, impedindo defesa perfeita infinita.
-- O Instinto Superior Completo tem a maior evasão quando está concentrado e com Ki cheio.
-- O Instinto Superior Verdadeiro abre mão de parte da evasão em troca do melhor ataque de precisão.
+- A chance é fixa e autoritativa no servidor; Ki baixo não reduz artificialmente o percentual. Se não houver Ki suficiente para pagar a esquiva, ela falha.
+- O SIGN possui 70% de esquiva e consome 2,0% do Ki máximo por esquiva bem-sucedida.
+- O MASTERED conserva 90% de esquiva e consome 1,8% do Ki máximo.
+- O TRUE possui 80% de esquiva, mas seu custo foi reduzido de 2,1% para 1,2% do Ki máximo.
 - O proc ofensivo exagerado do addon original é substituído por golpes de precisão menores e específicos para cada estágio.
 
-| Forma | Esquiva com Ki vazio | Esquiva com Ki cheio | Custo por esquiva | Precisão em maestria máxima |
-|---|---:|---:|---:|---:|
-| Sinal | 20% → 25% | 45% → 60% | 2,2% → 1,8% | 10% de chance, x1,15 |
-| Completo | 25% → 35% | 70% → 90% | 2,3% → 1,8% | 15% de chance, x1,20 |
-| Verdadeiro | 25% → 35% | 65% → 80% | 2,1% → 1,6% | 20% de chance, x1,30 |
+| Forma | Chance de esquiva | Custo por esquiva | Precisão em maestria máxima |
+|---|---:|---:|---:|
+| Sinal | 70% | 2,0% | 10% de chance, x1,15 |
+| Completo | 90% | 1,8% | 15% de chance, x1,20 |
+| Verdadeiro | 80% | 1,2% | 20% de chance, x1,30 |
 
-As setas indicam a evolução entre 0 e 100 de maestria.
+### Técnica do Instinto — Sinal
+
+Ao alcançar **100 de maestria no Instinto Superior Verdadeiro**, a tecla **K** libera uma versão técnica e empilhável do SIGN:
+
+- Funciona sobre qualquer transformação Saiyajin ativa, como Super Saiyajin, God, Blue e Blue Evolved.
+- Usa o slot nativo de forma empilhável do DMZ, assim como Kaioken; portanto, não pode coexistir com Kaioken, Ultimate ou outra forma empilhada.
+- Preserva cabelo, modelo, multiplicadores e força da transformação Saiyajin ativa.
+- Acrescenta olhos e aura prateados nativos, HUD próprio e os efeitos de esquiva/precisão do SIGN.
+- Não concede um segundo multiplicador de atributos: o benefício é técnico (70% de esquiva por 2,0% de Ki e precisão leve), evitando combinações ofensivas desbalanceadas.
+- Desativa automaticamente ao perder a transformação compatível. Pressionar K novamente também desativa.
 
 ## HUD do Ego
 

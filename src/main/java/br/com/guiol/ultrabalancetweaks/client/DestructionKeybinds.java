@@ -17,6 +17,9 @@ public final class DestructionKeybinds {
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_H, CATEGORY);
     public static final KeyMapping SPHERE = new KeyMapping("key.ultrabalancetweaks.sphere",
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_J, CATEGORY);
+    public static final KeyMapping INSTINCT_TECHNIQUE = new KeyMapping(
+            "key.ultrabalancetweaks.instinct_technique",
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
 
     private DestructionKeybinds() {
     }
@@ -25,6 +28,7 @@ public final class DestructionKeybinds {
     public static void register(RegisterKeyMappingsEvent event) {
         event.register(HAKAI);
         event.register(SPHERE);
+        event.register(INSTINCT_TECHNIQUE);
     }
 
     public static Component hakaiKey() {
@@ -33,5 +37,9 @@ public final class DestructionKeybinds {
 
     public static Component sphereKey() {
         return SPHERE.getTranslatedKeyMessage();
+    }
+
+    public static Component instinctTechniqueKey() {
+        return INSTINCT_TECHNIQUE.getTranslatedKeyMessage();
     }
 }

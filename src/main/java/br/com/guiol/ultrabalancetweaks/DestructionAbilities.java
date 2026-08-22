@@ -2,6 +2,7 @@ package br.com.guiol.ultrabalancetweaks;
 
 import br.com.guiol.ultrabalancetweaks.network.BalanceNetwork;
 import com.dragonminez.common.init.entities.ki.KiBlastEntity;
+import com.dragonminez.common.stats.StatsData;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -178,19 +179,27 @@ public final class DestructionAbilities {
     }
 
     private static float scaledKiDamage(AbilityContext context, double multiplier) {
-        double kiDamage = Math.max(1.0, context.state.data().getKiDamage());
+        double kiDamage = Math.max(1.0, context.data.getKiDamage());
         return (float) Math.min(Float.MAX_VALUE, kiDamage * multiplier);
     }
 
     private static AbilityContext validate(ServerPlayer player, DestructionAbility ability,
                                            double requiredGauge, double kiCostRatio) {
-        DmzForms.ActiveForm state = DmzForms.active(player);
-        if (state == null || !state.isUltraEgo()) {
-            message(player, "message.ultrabalancetweaks.requires_ultra_ego");
+        StatsData data = DmzForms.stats(player);
+        if (data == null || !data.getStatus().isHasCreatedCharacter()) {
             return null;
         }
-        float gauge = EgoData.gauge(player);
-        if (gauge + 1.0E-3 < requiredGauge) {
+        DmzForms.ActiveForm state = DmzForms.active(player);
+        boolean ultraEgo = state != null && state.isUltraEgo();
+        boolean masteredInBase = DmzForms.isBase(player) && InstinctTechnique.destructionUnlocked(player);
+        if (!ultraEgo && !masteredInBase) {
+            message(player, InstinctTechnique.destructionUnlocked(player)
+                    ? "message.ultrabalancetweaks.destruction_requires_base_or_ego"
+                    : "message.ultrabalancetweaks.requires_ultra_ego");
+            return null;
+        }
+        float gauge = ultraEgo ? EgoData.gauge(player) : 100.0f;
+        if (ultraEgo && gauge + 1.0E-3 < requiredGauge) {
             player.displayClientMessage(Component.translatable("message.ultrabalancetweaks.requires_ego",
                     Math.round(requiredGauge)), true);
             return null;
@@ -201,18 +210,18 @@ public final class DestructionAbilities {
                     (int) Math.ceil(cooldown / 20.0)), true);
             return null;
         }
-        float maximum = Math.max(1.0f, state.data().getMaxEnergy());
+        float maximum = Math.max(1.0f, data.getMaxEnergy());
         int cost = Math.max(1, (int) Math.ceil(maximum * kiCostRatio));
-        if (state.data().getResources().getCurrentEnergy() < cost) {
+        if (data.getResources().getCurrentEnergy() < cost) {
             message(player, "message.ultrabalancetweaks.not_enough_ki");
             return null;
         }
-        return new AbilityContext(state, cost);
+        return new AbilityContext(data, cost);
     }
 
     private static void payAndStart(ServerPlayer player, AbilityContext context,
                                     DestructionAbility ability, int cooldown) {
-        context.state.data().getResources().removeEnergy(context.kiCost);
+        context.data.getResources().removeEnergy(context.kiCost);
         DestructionData.startCooldown(player, ability, cooldown);
         EgoData.touchCombat(player);
         BalanceNetwork.syncDestruction(player);
@@ -265,6 +274,6 @@ public final class DestructionAbilities {
         player.displayClientMessage(Component.translatable(key), true);
     }
 
-    private record AbilityContext(DmzForms.ActiveForm state, int kiCost) {
+    private record AbilityContext(StatsData data, int kiCost) {
     }
 }

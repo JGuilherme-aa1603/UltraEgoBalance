@@ -28,6 +28,7 @@ public final class BalanceEvents {
     @SubscribeEvent
     public void onServerAboutToStart(ServerAboutToStartEvent event) {
         FormTuning.apply();
+        InstinctTechnique.installNativeStackForm();
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -64,33 +65,34 @@ public final class BalanceEvents {
             return;
         }
 
-        DmzForms.ActiveForm state = DmzForms.active(victim);
-        if (state == null || !state.isUltraInstinct()) {
+        boolean technique = InstinctTechnique.isActive(victim);
+        DmzForms.ActiveForm state = DmzForms.activeUltraInstinct(victim);
+        if (state == null && !technique) {
             return;
         }
 
-        BalanceConfig.DodgeTuning tuning = dodgeTuning(state.form());
-        double mastery = state.masteryRatio();
-        double minChance = lerp(tuning.minAtZero().get(), tuning.minAtFull().get(), mastery);
-        double maxChance = lerp(tuning.maxAtZero().get(), tuning.maxAtFull().get(), mastery);
-        float maxEnergy = Math.max(1.0f, state.data().getMaxEnergy());
-        float currentEnergy = Math.max(0.0f, state.data().getResources().getCurrentEnergy());
-        double kiRatio = DmzForms.clamp01(currentEnergy / maxEnergy);
-        double chance = lerp(minChance, maxChance, kiRatio);
+        String form = technique ? "sign" : state.form();
+        double mastery = technique ? 1.0 : state.masteryRatio();
+        BalanceConfig.DodgeTuning tuning = dodgeTuning(form);
+        var data = technique ? DmzForms.stats(victim) : state.data();
+        if (data == null) {
+            return;
+        }
+        float maxEnergy = Math.max(1.0f, data.getMaxEnergy());
+        float currentEnergy = Math.max(0.0f, data.getResources().getCurrentEnergy());
 
-        if (victim.getRandom().nextDouble() >= chance) {
+        if (victim.getRandom().nextDouble() >= tuning.chance().get()) {
             return;
         }
 
-        double costRatio = lerp(tuning.costAtZero().get(), tuning.costAtFull().get(), mastery);
-        int kiCost = Math.max(1, (int) Math.ceil(maxEnergy * costRatio));
+        int kiCost = Math.max(1, (int) Math.ceil(maxEnergy * tuning.kiCost().get()));
         if (currentEnergy < kiCost) {
             return;
         }
 
-        state.data().getResources().removeEnergy(kiCost);
+        data.getResources().removeEnergy(kiCost);
         event.setCanceled(true);
-        playDodge(victim, attacker, state.form(), mastery);
+        playDodge(victim, attacker, form, mastery);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -129,8 +131,13 @@ public final class BalanceEvents {
             DmzForms.ActiveForm attackerForm = DmzForms.active(attacker);
             if (attackerForm != null && attackerForm.isUltraEgo()) {
                 replaceOriginalUltraEgoMultiplier(event, attacker);
-            } else if (attackerForm != null && attackerForm.isUltraInstinct()) {
-                applyUltraInstinctPrecision(event, attacker, attackerForm);
+            } else {
+                DmzForms.ActiveForm instinct = DmzForms.activeUltraInstinct(attacker);
+                if (instinct != null) {
+                    applyUltraInstinctPrecision(event, attacker, instinct.form(), instinct.masteryRatio());
+                } else if (InstinctTechnique.isActive(attacker)) {
+                    applyUltraInstinctPrecision(event, attacker, "sign", 1.0);
+                }
             }
         }
 
@@ -175,6 +182,11 @@ public final class BalanceEvents {
             return;
         }
 
+        if (player.tickCount % 20 == 0) {
+            InstinctTechnique.checkMasteryRewards(player);
+            InstinctTechnique.validateActiveState(player);
+        }
+
         boolean active = DmzForms.isUltraEgo(player);
         float gauge = EgoData.gauge(player);
         if (!active && gauge > 0.0f) {
@@ -195,6 +207,7 @@ public final class BalanceEvents {
     @SubscribeEvent
     public void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
+            InstinctTechnique.checkMasteryRewards(player);
             boolean active = DmzForms.isUltraEgo(player);
             BalanceNetwork.syncEgo(player, active, active ? EgoData.gauge(player) : 0.0f);
             BalanceNetwork.syncDestruction(player);
@@ -219,9 +232,9 @@ public final class BalanceEvents {
     }
 
     private static void applyUltraInstinctPrecision(LivingHurtEvent event, ServerPlayer attacker,
-                                                     DmzForms.ActiveForm state) {
-        BalanceConfig.PrecisionTuning tuning = precisionTuning(state.form());
-        double development = 0.5 + 0.5 * state.masteryRatio();
+                                                     String form, double masteryRatio) {
+        BalanceConfig.PrecisionTuning tuning = precisionTuning(form);
+        double development = 0.5 + 0.5 * masteryRatio;
         double chance = tuning.chanceAtFull().get() * development;
         if (attacker.getRandom().nextDouble() >= chance) {
             return;

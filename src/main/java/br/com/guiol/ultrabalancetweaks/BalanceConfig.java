@@ -133,10 +133,10 @@ public final class BalanceConfig {
         COMMON_BUILDER.pop();
 
         COMMON_BUILDER.push("ultra_instinct");
-        COMMON_BUILDER.comment("Dodge is interpolated by mastery, then by the fraction of Ki currently available.");
-        SIGN_DODGE = dodge("sign", 0.20, 0.25, 0.45, 0.60, 0.022, 0.018);
-        MASTERED_DODGE = dodge("mastered", 0.25, 0.35, 0.70, 0.90, 0.023, 0.018);
-        TRUE_DODGE = dodge("true", 0.25, 0.35, 0.65, 0.80, 0.021, 0.016);
+        COMMON_BUILDER.comment("Exact server-authoritative dodge values. Chance no longer falls with current Ki or mastery; a dodge simply fails when there is not enough Ki to pay its cost.");
+        SIGN_DODGE = fixedDodge("sign_exact", 0.70, 0.020);
+        MASTERED_DODGE = fixedDodge("mastered_exact", 0.90, 0.018);
+        TRUE_DODGE = fixedDodge("true_exact", 0.80, 0.012);
 
         COMMON_BUILDER.comment("Precision procs start at half the configured chance at zero mastery and reach the full values at 100 mastery.");
         SIGN_PRECISION = precision("sign", 0.10, 1.15);
@@ -160,17 +160,14 @@ public final class BalanceConfig {
     private BalanceConfig() {
     }
 
-    private static DodgeTuning dodge(String key, double min0, double min100, double max0, double max100,
-                                      double cost0, double cost100) {
+    private static DodgeTuning fixedDodge(String key, double chanceValue, double costValue) {
         COMMON_BUILDER.push(key + "_dodge");
-        ForgeConfigSpec.DoubleValue minAtZero = commonDecimal("min_chance_at_0_mastery", min0, 0.0, 1.0, "Chance with empty Ki at zero mastery.");
-        ForgeConfigSpec.DoubleValue minAtFull = commonDecimal("min_chance_at_100_mastery", min100, 0.0, 1.0, "Chance with empty Ki at full mastery.");
-        ForgeConfigSpec.DoubleValue maxAtZero = commonDecimal("max_chance_at_0_mastery", max0, 0.0, 1.0, "Chance with full Ki at zero mastery.");
-        ForgeConfigSpec.DoubleValue maxAtFull = commonDecimal("max_chance_at_100_mastery", max100, 0.0, 1.0, "Chance with full Ki at full mastery.");
-        ForgeConfigSpec.DoubleValue costAtZero = commonDecimal("ki_cost_at_0_mastery", cost0, 0.0, 1.0, "Fraction of maximum Ki spent per successful dodge at zero mastery.");
-        ForgeConfigSpec.DoubleValue costAtFull = commonDecimal("ki_cost_at_100_mastery", cost100, 0.0, 1.0, "Fraction of maximum Ki spent per successful dodge at full mastery.");
+        ForgeConfigSpec.DoubleValue chance = commonDecimal("chance", chanceValue, 0.0, 1.0,
+                "Exact chance to evade an eligible attack.");
+        ForgeConfigSpec.DoubleValue cost = commonDecimal("ki_cost", costValue, 0.0, 1.0,
+                "Fraction of maximum Ki spent per successful dodge.");
         COMMON_BUILDER.pop();
-        return new DodgeTuning(minAtZero, minAtFull, maxAtZero, maxAtFull, costAtZero, costAtFull);
+        return new DodgeTuning(chance, cost);
     }
 
     private static PrecisionTuning precision(String key, double chance, double damage) {
@@ -186,12 +183,8 @@ public final class BalanceConfig {
         return COMMON_BUILDER.defineInRange(key, value, min, max);
     }
 
-    public record DodgeTuning(ForgeConfigSpec.DoubleValue minAtZero,
-                              ForgeConfigSpec.DoubleValue minAtFull,
-                              ForgeConfigSpec.DoubleValue maxAtZero,
-                              ForgeConfigSpec.DoubleValue maxAtFull,
-                              ForgeConfigSpec.DoubleValue costAtZero,
-                              ForgeConfigSpec.DoubleValue costAtFull) {
+    public record DodgeTuning(ForgeConfigSpec.DoubleValue chance,
+                              ForgeConfigSpec.DoubleValue kiCost) {
     }
 
     public record PrecisionTuning(ForgeConfigSpec.DoubleValue chanceAtFull,

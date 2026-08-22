@@ -5,6 +5,7 @@ import br.com.guiol.ultrabalancetweaks.UltraBalanceTweaks;
 import br.com.guiol.ultrabalancetweaks.network.BalanceNetwork;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -30,5 +31,14 @@ public final class DestructionInputHandler {
         while (DestructionKeybinds.SPHERE.consumeClick()) {
             BalanceNetwork.requestAbility(DestructionAbility.SPHERE);
         }
+        while (DestructionKeybinds.INSTINCT_TECHNIQUE.consumeClick()) {
+            BalanceNetwork.toggleInstinctTechnique();
+        }
+    }
+
+    @SubscribeEvent
+    public static void loggedOut(ClientPlayerNetworkEvent.LoggingOut event) {
+        ClientDestructionState.clear();
+        ClientEgoState.update(false, 0.0f);
     }
 }
