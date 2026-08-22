@@ -88,14 +88,29 @@ public final class FormTuning {
 
         FormConfig.FormData blue = ConfigManager.getForm("saiyan", "godforms", "super_saiyan_blue");
         if (blue != null) {
-            blue.setAuraType("god");
+            blue.setAuraType("kakarot");
             blue.setAuraLayer(1);
             blue.setAuraColor("#35E4FF");
             blue.setExtraAuraType("kakarot");
-            blue.setExtraAuraLayer(2);
-            blue.setExtraAuraColor("#176BFF");
+            blue.setExtraAuraLayer(-1);
+            blue.setExtraAuraColor("#FFFFFF");
             blue.setHasLightnings(true);
             blue.setLightningColor("#D6FAFF");
+            blue.setTintIntensity(0.0);
+        }
+
+        FormConfig.FormData blueEvolved = ConfigManager.getForm(
+                "saiyan", "godforms", "super_saiyan_blue_evolved");
+        if (blueEvolved != null) {
+            blueEvolved.setAuraType("kakarot");
+            blueEvolved.setAuraLayer(1);
+            blueEvolved.setAuraColor("#49C8FF");
+            blueEvolved.setExtraAuraType("kakarot");
+            blueEvolved.setExtraAuraLayer(-1);
+            blueEvolved.setExtraAuraColor("#FFFFFF");
+            blueEvolved.setHasLightnings(true);
+            blueEvolved.setLightningColor("#C7F2FF");
+            blueEvolved.setTintIntensity(0.0);
         }
     }
 }

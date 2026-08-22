@@ -28,6 +28,7 @@
   "message.ultrabalancetweaks.hakai_hit": "Destruction energy struck %s.",
   "message.ultrabalancetweaks.hakai_launched": "Hakai %2$s launched at %1$s!",
   "message.ultrabalancetweaks.hakai_level_up": "Hakai mastery advanced to level %s!",
+  "message.ultrabalancetweaks.hakai_mastery_complete": "Hakai fully mastered: Hakai and Sphere of Destruction no longer require Ego!",
   "message.ultrabalancetweaks.hakai_level_locked": "Hakai is still locked. Current Battle Power: %s; mastery: %s/100.",
   "message.ultrabalancetweaks.hakai_requires_level": "That target requires Hakai level %s.",
   "message.ultrabalancetweaks.hakai_matter_erased": "%s was disintegrated by Hakai.",

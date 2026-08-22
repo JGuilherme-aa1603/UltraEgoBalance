@@ -10,7 +10,7 @@ Addon pessoal para Forge 1.20.1 criado para equilibrar as formas divinas de fim 
 
 O Instinto Superior representa controle, eficiência e sobrevivência. O Ultra Ego representa risco, resistência e poder destrutivo crescente. As duas escolhas têm forças bem diferentes, sem apagar a identidade mostrada no mangá de Dragon Ball Super.
 
-## Multiplicadores Saiyajin — versão 1.5.1
+## Multiplicadores Saiyajin — versão 1.5.2
 
 Os valores são aplicados e verificados em memória, no servidor e no cliente, apenas para a raça Saiyajin. Eles representam o multiplicador final de força, skill/velocidade, poder de Ki e defesa/resistência; o bônus oculto de até 35% por maestria do DMZ é neutralizado nessas formas para a tabela permanecer exata. Os JSONs originais permanecem intactos.
 
@@ -45,7 +45,7 @@ Todos os valores-base podem ser alterados na seção `saiyan_form_multipliers` d
 - Sair da forma ou morrer zera o medidor.
 - VIT é ajustado para x1,60 e o consumo de stamina para 0,045 apenas em memória; nenhum JSON original é alterado.
 
-## Técnicas de Destruição — versão 1.5.1
+## Técnicas de Destruição — versão 1.5.2
 
 Ao alcançar **100 de maestria no Ultra Ego**, Hakai e Esfera da Destruição são aprendidos permanentemente e podem ser usados na forma base ou sobre qualquer outra transformação. Fora do Ultra Ego, eles dispensam o medidor de Ego, mas conservam custo de Ki, cooldown, progressão e proteções. No Ultra Ego, continuam exigindo o nível configurado do medidor.
 
@@ -54,6 +54,7 @@ Ao alcançar **100 de maestria no Ultra Ego**, Hakai e Esfera da Destruição s�
 - Evolui em quatro níveis por uma combinação do Poder de Batalha nativo do DMZ e uma maestria própria do Hakai: I (matéria), II (energia), III (seres vivos) e IV (apagamento verdadeiro).
 - Limites padrão: I = 100 mil PB/10 maestria; II = 1 milhão/25; III = 10 milhões/50; IV = 100 milhões/100. Todos os limites de PB são configuráveis.
 - O poder efetivo compara o PB do usuário com o PB do alvo e recebe até 50% de bônus com a maestria. Alvos muito superiores resistem ou recebem dano parcial; ter o nível IV não garante apagar qualquer adversário.
+- Ao alcançar 100 de maestria própria do Hakai, Hakai e Esfera da Destruição deixam de exigir Ego em qualquer forma, inclusive durante o Ultra Ego. Custo de Ki e cooldown permanecem ativos.
 - Nível I apaga itens soltos e projéteis físicos; nível II também apaga projéteis de Ki; nível III atinge seres vivos; nível IV pode apagar criaturas elegíveis sem deixar drops quando o usuário é suficientemente superior.
 - Exige 70 pontos de Ego e consome 35% do Ki máximo.
 - Alcance de 24 blocos e cooldown de 30 segundos.
@@ -149,7 +150,7 @@ Ao alcançar **100 de maestria no Instinto Superior Verdadeiro**, a tecla **K** 
 ## Auras divinas
 
 - God, Blue, Blue Evolved e Instinto Superior TRUE deixam de manter a aura forçada o tempo todo. A aura começa desligada e volta a obedecer ao controle normal do menu do DMZ.
-- God recebeu uma composição vermelho-dourada em duas camadas; Blue recebeu uma composição ciano-azul em duas camadas com relâmpagos claros. Blue Evolved preserva seu visual próprio.
+- God recebeu uma composição vermelho-dourada em duas camadas. Blue e Blue Evolved usam a camada nativa segura em tons ciano/azul com relâmpagos claros; a antiga camada azul-escura foi removida porque o sombreamento de carregamento podia dessaturar a pele do personagem.
 
 ## Configuração
 

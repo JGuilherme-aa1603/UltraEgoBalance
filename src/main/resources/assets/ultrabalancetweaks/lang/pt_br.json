@@ -28,6 +28,7 @@
   "message.ultrabalancetweaks.hakai_hit": "Energia da Destruição atingiu %s.",
   "message.ultrabalancetweaks.hakai_launched": "Hakai %2$s lançado contra %1$s!",
   "message.ultrabalancetweaks.hakai_level_up": "Maestria do Hakai evoluiu para o nível %s!",
+  "message.ultrabalancetweaks.hakai_mastery_complete": "Domínio completo do Hakai: Hakai e Esfera da Destruição não exigem mais Ego!",
   "message.ultrabalancetweaks.hakai_level_locked": "Hakai ainda bloqueado. Poder de batalha atual: %s; maestria: %s/100.",
   "message.ultrabalancetweaks.hakai_requires_level": "Esse alvo exige Hakai nível %s.",
   "message.ultrabalancetweaks.hakai_matter_erased": "%s foi desintegrado pelo Hakai.",

@@ -59,11 +59,12 @@ public final class BalanceNetwork {
     public static void syncDestruction(ServerPlayer player) {
         int hakaiLevel = HakaiProgressData.level(player);
         int nextHakaiLevel = Math.min(4, hakaiLevel + 1);
+        boolean masteredHakai = HakaiProgressData.mastery(player) >= 99.95f;
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new DestructionSyncPacket(
                 DestructionData.cooldown(player, DestructionAbility.HAKAI),
                 DestructionData.cooldown(player, DestructionAbility.SPHERE),
-                BalanceConfig.HAKAI_REQUIRED_EGO.get().floatValue(),
-                BalanceConfig.SPHERE_REQUIRED_EGO.get().floatValue(),
+                masteredHakai ? 0.0f : BalanceConfig.HAKAI_REQUIRED_EGO.get().floatValue(),
+                masteredHakai ? 0.0f : BalanceConfig.SPHERE_REQUIRED_EGO.get().floatValue(),
                 BalanceConfig.AURA_REQUIRED_EGO.get().floatValue(),
                 InstinctTechnique.destructionUnlocked(player),
                 InstinctTechnique.unlocked(player),

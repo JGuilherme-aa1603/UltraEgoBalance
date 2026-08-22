@@ -45,7 +45,8 @@ public final class HakaiProgressData {
 
     public static float addMastery(ServerPlayer player, double amount) {
         int beforeLevel = level(player);
-        float result = Math.max(0.0f, Math.min(100.0f, mastery(player) + (float) amount));
+        float beforeMastery = mastery(player);
+        float result = Math.max(0.0f, Math.min(100.0f, beforeMastery + (float) amount));
         player.getPersistentData().putFloat(MASTERY_KEY, result);
         int afterLevel = level(player);
         if (afterLevel > beforeLevel) {
@@ -53,6 +54,12 @@ public final class HakaiProgressData {
                     roman(afterLevel)));
             player.serverLevel().playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP,
                     SoundSource.PLAYERS, 1.0f, 0.72f + afterLevel * 0.12f);
+        }
+        if (beforeMastery < 100.0f && result >= 100.0f) {
+            player.sendSystemMessage(Component.translatable(
+                    "message.ultrabalancetweaks.hakai_mastery_complete"));
+            player.serverLevel().playSound(null, player.blockPosition(), SoundEvents.TOTEM_USE,
+                    SoundSource.PLAYERS, 0.9f, 0.72f);
         }
         BalanceNetwork.syncDestruction(player);
         return result;

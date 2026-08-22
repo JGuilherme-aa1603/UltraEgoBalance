@@ -236,14 +236,15 @@ public final class DestructionAbilities {
         DmzForms.ActiveForm state = DmzForms.active(player);
         boolean ultraEgo = state != null && state.isUltraEgo();
         boolean learnedDestruction = InstinctTechnique.destructionUnlocked(player);
+        boolean masteredDestruction = learnedDestruction && HakaiProgressData.mastery(player) >= 99.95f;
         if (!ultraEgo && !learnedDestruction) {
             message(player, InstinctTechnique.destructionUnlocked(player)
                     ? "message.ultrabalancetweaks.destruction_requires_mastery"
                     : "message.ultrabalancetweaks.requires_ultra_ego");
             return null;
         }
-        float gauge = ultraEgo ? EgoData.gauge(player) : 100.0f;
-        if (ultraEgo && gauge + 1.0E-3 < requiredGauge) {
+        float gauge = ultraEgo && !masteredDestruction ? EgoData.gauge(player) : 100.0f;
+        if (ultraEgo && !masteredDestruction && gauge + 1.0E-3 < requiredGauge) {
             player.displayClientMessage(Component.translatable("message.ultrabalancetweaks.requires_ego",
                     Math.round(requiredGauge)), true);
             return null;
