@@ -6,6 +6,7 @@ import br.com.guiol.ultrabalancetweaks.network.BalanceNetwork;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
+import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -35,6 +36,20 @@ public final class DestructionInputHandler {
         while (DestructionKeybinds.INSTINCT_TECHNIQUE.consumeClick()) {
             BalanceNetwork.toggleInstinctTechnique();
         }
+    }
+
+    @SubscribeEvent
+    public static void instinctiveCounterClick(InputEvent.InteractionKeyMappingTriggered event) {
+        if (!event.isAttack() || !ClientCounterState.active()) {
+            return;
+        }
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.player == null || minecraft.screen != null) {
+            return;
+        }
+        BalanceNetwork.requestCounter();
+        event.setSwingHand(false);
+        event.setCanceled(true);
     }
 
     @SubscribeEvent

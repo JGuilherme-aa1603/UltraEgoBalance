@@ -10,9 +10,9 @@ Addon pessoal para Forge 1.20.1 criado para equilibrar as formas divinas de fim 
 
 O Instinto Superior representa controle, eficiência e sobrevivência. O Ultra Ego representa risco, resistência e poder destrutivo crescente. As duas escolhas têm forças bem diferentes, sem apagar a identidade mostrada no mangá de Dragon Ball Super.
 
-## Multiplicadores Saiyajin — versão 1.4.0
+## Multiplicadores Saiyajin — versão 1.5.0
 
-Os valores são aplicados em memória apenas à raça Saiyajin e representam força, skill/velocidade, poder de Ki e defesa/resistência. Os JSONs originais permanecem intactos.
+Os valores são aplicados e verificados em memória, no servidor e no cliente, apenas para a raça Saiyajin. Eles representam o multiplicador final de força, skill/velocidade, poder de Ki e defesa/resistência; o bônus oculto de até 35% por maestria do DMZ é neutralizado nessas formas para a tabela permanecer exata. Os JSONs originais permanecem intactos.
 
 | Transformação | Força | Velocidade | Poder | Resistência |
 |---|---:|---:|---:|---:|
@@ -45,19 +45,23 @@ Todos os valores-base podem ser alterados na seção `saiyan_form_multipliers` d
 - Sair da forma ou morrer zera o medidor.
 - VIT é ajustado para x1,60 e o consumo de stamina para 0,045 apenas em memória; nenhum JSON original é alterado.
 
-## Técnicas de Destruição — versão 1.3.0
+## Técnicas de Destruição — versão 1.5.0
 
-Ao alcançar **100 de maestria no Ultra Ego**, Hakai e Esfera da Destruição são aprendidos permanentemente e passam a funcionar também na forma base. Na base eles usam o dano de Ki não transformado e dispensam o medidor de Ego, mas conservam o custo de Ki, cooldown e todas as proteções. Durante o Ultra Ego, continuam exigindo o nível configurado do medidor. As técnicas não podem ser usadas sobre outra transformação.
+Ao alcançar **100 de maestria no Ultra Ego**, Hakai e Esfera da Destruição são aprendidos permanentemente e podem ser usados na forma base ou sobre qualquer outra transformação. Fora do Ultra Ego, eles dispensam o medidor de Ego, mas conservam custo de Ki, cooldown, progressão e proteções. No Ultra Ego, continuam exigindo o nível configurado do medidor.
 
 ### Hakai — tecla H
 
+- Evolui em quatro níveis por uma combinação do Poder de Batalha nativo do DMZ e uma maestria própria do Hakai: I (matéria), II (energia), III (seres vivos) e IV (apagamento verdadeiro).
+- Limites padrão: I = 100 mil PB/10 maestria; II = 1 milhão/25; III = 10 milhões/50; IV = 100 milhões/100. Todos os limites de PB são configuráveis.
+- O poder efetivo compara o PB do usuário com o PB do alvo e recebe até 50% de bônus com a maestria. Alvos muito superiores resistem ou recebem dano parcial; ter o nível IV não garante apagar qualquer adversário.
+- Nível I apaga itens soltos e projéteis físicos; nível II também apaga projéteis de Ki; nível III atinge seres vivos; nível IV pode apagar criaturas elegíveis sem deixar drops quando o usuário é suficientemente superior.
 - Exige 70 pontos de Ego e consome 35% do Ki máximo.
 - Alcance de 24 blocos e cooldown de 30 segundos.
 - Usa um projétil de Ki nativo do DragonMineZ, com shader, cores, colisão, som e impacto do próprio mod.
 - O dano escala com o atributo de dano de Ki do personagem transformado (x5 por padrão), em vez de ignorar o nível do jogador.
 - Garante um piso de 35% da vida contra criaturas e 18% contra jogadores, além de um mínimo absoluto de 40 de dano; jogadores nunca são executados.
 - Persegue o alvo marcado, possui 100% de penetração de armadura da técnica e não destrói blocos.
-- Finaliza criaturas comuns abaixo de 15% de vida.
+- Finaliza criaturas comuns enfraquecidas quando a relação de poder permite.
 - Jogadores criativos/espectadores, pets domesticados e entidades marcadas como chefes pelo Forge não podem ser apagados.
 
 ### Esfera da Destruição — tecla J
@@ -101,6 +105,7 @@ As teclas podem ser alteradas normalmente em **Opções → Controles → Ultra 
 | TRUE | 0,8 s | x1,35 | 1,0 s |
 
 - Só pode atingir o agressor da esquiva e usa o cálculo normal de dano do DMZ.
+- Durante a janela, basta clicar para atacar: não é necessário mirar nem alcançar manualmente. O servidor vira o personagem para o agressor, aplica um impulso de aproximação e executa o ataque nativo automaticamente, com alcance máximo de 24 blocos.
 - Hakai e Esfera da Destruição não podem consumir nem receber o bônus.
 - Um indicador prateado junto da mira mostra a janela restante e o multiplicador.
 - MASTERED e TRUE possuem o mesmo contra-ataque; MASTERED conserva mais esquiva, enquanto TRUE conserva o menor custo de Ki.
@@ -123,6 +128,20 @@ Ao alcançar **100 de maestria no Instinto Superior Verdadeiro**, a tecla **K** 
 - Brilho animado durante o carregamento.
 - Pulso, partículas, som e mensagem quando chega a 100.
 - Posição, largura, percentual e visibilidade podem ser configurados.
+- O chip do Hakai mostra também o nível atual em algarismos romanos.
+
+## Super Kamehameha
+
+- Nova técnica nativa do tipo onda, ensinada por Goku no menu de mestres por 6.000 TP.
+- Dano-base x2,5, exatamente o mesmo do Final Flash original do DMZ; portanto, preserva a equivalência entre as duas técnicas de pico.
+- Largura x3,0: três vezes o Kamehameha comum e duas vezes o Final Flash.
+- A escala visual maior é compensada por velocidade ligeiramente menor, carga de 120 ticks e custo de Ki calculado pelo próprio sistema do DMZ.
+- Reutiliza animação, som, shader, colisão, progressão e slots de técnicas do Kamehameha nativo.
+
+## Auras divinas
+
+- God, Blue, Blue Evolved e Instinto Superior TRUE deixam de manter a aura forçada o tempo todo. A aura começa desligada e volta a obedecer ao controle normal do menu do DMZ.
+- God recebeu uma composição vermelho-dourada em duas camadas; Blue recebeu uma composição ciano-azul em duas camadas com relâmpagos claros. Blue Evolved preserva seu visual próprio.
 
 ## Configuração
 

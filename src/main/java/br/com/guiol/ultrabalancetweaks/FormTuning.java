@@ -10,6 +10,15 @@ public final class FormTuning {
     }
 
     public static void apply() {
+        int ultraEgoRegistries = applyRuntimeTuning();
+        int saiyanForms = applyAttributeMultipliers();
+
+        UltraBalanceTweaks.LOGGER.info(
+                "Applied verified tuning to {} Ultra Ego race registries and {} Saiyan form entries",
+                ultraEgoRegistries, saiyanForms);
+    }
+
+    public static int applyRuntimeTuning() {
         int ultraEgoRegistries = 0;
         for (String race : ConfigManager.getAllRaceStats().keySet()) {
             Map<String, FormConfig> groups = ConfigManager.getAllFormsForRace(race);
@@ -28,7 +37,10 @@ public final class FormTuning {
             mastered.setStaminaDrain(BalanceConfig.EGO_STAMINA_DRAIN.get());
             ultraEgoRegistries++;
         }
+        return ultraEgoRegistries;
+    }
 
+    public static int applyAttributeMultipliers() {
         int saiyanForms = 0;
         saiyanForms += tuneSaiyan("supersaiyan", "supersaiyanmastered", BalanceConfig.SSJ1_MULTIPLIERS);
         saiyanForms += tuneSaiyan("supersaiyan", "supersaiyan2", BalanceConfig.SSJ2_MULTIPLIERS);
@@ -45,9 +57,7 @@ public final class FormTuning {
         saiyanForms += tuneSaiyan("ultrainstinct", "mastered", BalanceConfig.UI_MASTERED_MULTIPLIERS);
         saiyanForms += tuneSaiyan("ultrainstinct", "true", BalanceConfig.UI_TRUE_MULTIPLIERS);
 
-        UltraBalanceTweaks.LOGGER.info(
-                "Applied non-persistent tuning to {} Ultra Ego race registries and {} Saiyan form entries",
-                ultraEgoRegistries, saiyanForms);
+        return saiyanForms;
     }
 
     private static int tuneSaiyan(String group, String form, BalanceConfig.FormMultipliers tuning) {
@@ -60,6 +70,32 @@ public final class FormTuning {
         data.setSkpMultiplier(tuning.skill().get());
         data.setPwrMultiplier(tuning.kiPower().get());
         data.setDefMultiplier(tuning.defense().get());
+        data.setMaxStatsMultiplier(1.0);
         return 1;
+    }
+
+    public static void applyAuraVisuals() {
+        FormConfig.FormData god = ConfigManager.getForm("saiyan", "godforms", "super_saiyan_god");
+        if (god != null) {
+            god.setAuraType("god");
+            god.setAuraLayer(1);
+            god.setAuraColor("#FF493D");
+            god.setExtraAuraType("kakarot");
+            god.setExtraAuraLayer(0);
+            god.setExtraAuraColor("#FFB13B");
+            god.setHasLightnings(false);
+        }
+
+        FormConfig.FormData blue = ConfigManager.getForm("saiyan", "godforms", "super_saiyan_blue");
+        if (blue != null) {
+            blue.setAuraType("god");
+            blue.setAuraLayer(1);
+            blue.setAuraColor("#35E4FF");
+            blue.setExtraAuraType("kakarot");
+            blue.setExtraAuraLayer(2);
+            blue.setExtraAuraColor("#176BFF");
+            blue.setHasLightnings(true);
+            blue.setLightningColor("#D6FAFF");
+        }
     }
 }

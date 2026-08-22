@@ -169,6 +169,7 @@ public final class InstinctTechnique {
     }
 
     public static void checkMasteryRewards(ServerPlayer player) {
+        HakaiProgressData.ensureInitialized(player);
         if (destructionUnlocked(player) && !player.getPersistentData().getBoolean(UE_NOTICE)) {
             player.getPersistentData().putBoolean(UE_NOTICE, true);
             rewardEffect(player, "message.ultrabalancetweaks.destruction_mastered");

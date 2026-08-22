@@ -4,7 +4,9 @@
   "package": "br.com.guiol.ultrabalancetweaks.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "OriginalUltraInstinctHandlerMixin"
+    "OriginalUltraInstinctHandlerMixin",
+    "AddonAuraPolicyMixin",
+    "DivineAuraPersistenceMixin"
   ],
   "injectors": {
     "defaultRequire": 1

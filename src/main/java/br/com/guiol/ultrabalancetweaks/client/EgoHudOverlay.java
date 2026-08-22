@@ -91,7 +91,9 @@ public final class EgoHudOverlay {
             int gap = 4;
             int chipWidth = (width - gap) / 2;
             drawAbilityChip(graphics, minecraft, x, y + barHeight + 5, chipWidth,
-                    DestructionKeybinds.hakaiKey(), Component.translatable("gui.ultrabalancetweaks.hakai_short"),
+                    DestructionKeybinds.hakaiKey(),
+                    Component.translatable("gui.ultrabalancetweaks.hakai_level",
+                            ClientDestructionState.hakaiLevelRoman()),
                     gauge, ClientDestructionState.hakaiRequirement(), ClientDestructionState.hakaiCooldown());
             drawAbilityChip(graphics, minecraft, x + chipWidth + gap, y + barHeight + 5, chipWidth,
                     DestructionKeybinds.sphereKey(), Component.translatable("gui.ultrabalancetweaks.sphere_short"),
@@ -100,7 +102,8 @@ public final class EgoHudOverlay {
     }
 
     private static void drawAbilityChip(GuiGraphics graphics, Minecraft minecraft, int x, int y, int width,
-                                        Component key, Component name, float gauge, float requirement, int cooldown) {
+                                        Component key, Component displayName,
+                                        float gauge, float requirement, int cooldown) {
         boolean unlocked = gauge + 1.0E-3f >= requirement;
         boolean ready = unlocked && cooldown <= 0;
         int border = ready ? argb(220, 215, 72, 255)
@@ -118,7 +121,7 @@ public final class EgoHudOverlay {
         } else {
             status = Component.translatable("gui.ultrabalancetweaks.ready_short").getString();
         }
-        String text = key.getString() + " " + name.getString() + " " + status;
+        String text = key.getString() + " " + displayName.getString() + " " + status;
         graphics.drawCenteredString(minecraft.font, text, x + width / 2, y + 2, textColor);
     }
 

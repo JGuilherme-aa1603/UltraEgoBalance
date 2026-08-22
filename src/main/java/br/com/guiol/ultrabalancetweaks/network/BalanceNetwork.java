@@ -5,6 +5,7 @@ import br.com.guiol.ultrabalancetweaks.BalanceConfig;
 import br.com.guiol.ultrabalancetweaks.DestructionAbility;
 import br.com.guiol.ultrabalancetweaks.DestructionData;
 import br.com.guiol.ultrabalancetweaks.InstinctTechnique;
+import br.com.guiol.ultrabalancetweaks.HakaiProgressData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkRegistry;
@@ -12,7 +13,7 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public final class BalanceNetwork {
-    private static final String PROTOCOL = "4";
+    private static final String PROTOCOL = "5";
     private static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
             .named(ResourceLocation.fromNamespaceAndPath(UltraBalanceTweaks.MOD_ID, "main"))
             .networkProtocolVersion(() -> PROTOCOL)
@@ -35,6 +36,8 @@ public final class BalanceNetwork {
                 InstinctTechniqueRequestPacket::handle);
         CHANNEL.registerMessage(4, CounterSyncPacket.class,
                 CounterSyncPacket::encode, CounterSyncPacket::decode, CounterSyncPacket::handle);
+        CHANNEL.registerMessage(5, CounterRequestPacket.class,
+                CounterRequestPacket::encode, CounterRequestPacket::decode, CounterRequestPacket::handle);
     }
 
     public static void syncEgo(ServerPlayer player, boolean active, float gauge) {
@@ -49,6 +52,10 @@ public final class BalanceNetwork {
         CHANNEL.sendToServer(new InstinctTechniqueRequestPacket());
     }
 
+    public static void requestCounter() {
+        CHANNEL.sendToServer(new CounterRequestPacket());
+    }
+
     public static void syncDestruction(ServerPlayer player) {
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new DestructionSyncPacket(
                 DestructionData.cooldown(player, DestructionAbility.HAKAI),
@@ -58,7 +65,10 @@ public final class BalanceNetwork {
                 BalanceConfig.AURA_REQUIRED_EGO.get().floatValue(),
                 InstinctTechnique.destructionUnlocked(player),
                 InstinctTechnique.unlocked(player),
-                InstinctTechnique.isActive(player)));
+                InstinctTechnique.isActive(player),
+                HakaiProgressData.level(player),
+                HakaiProgressData.mastery(player),
+                HakaiProgressData.battlePower(player)));
     }
 
     public static void syncCounter(ServerPlayer player, int remainingTicks, float multiplier) {

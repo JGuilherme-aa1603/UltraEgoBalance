@@ -26,6 +26,12 @@ public final class BalanceConfig {
     public static final ForgeConfigSpec.DoubleValue HAKAI_PLAYER_DAMAGE_FLOOR;
     public static final ForgeConfigSpec.DoubleValue HAKAI_EXECUTION_THRESHOLD;
     public static final ForgeConfigSpec.BooleanValue HAKAI_EXECUTION_ENABLED;
+    public static final ForgeConfigSpec.DoubleValue HAKAI_LEVEL_1_BATTLE_POWER;
+    public static final ForgeConfigSpec.DoubleValue HAKAI_LEVEL_2_BATTLE_POWER;
+    public static final ForgeConfigSpec.DoubleValue HAKAI_LEVEL_3_BATTLE_POWER;
+    public static final ForgeConfigSpec.DoubleValue HAKAI_LEVEL_4_BATTLE_POWER;
+    public static final ForgeConfigSpec.DoubleValue HAKAI_MASTERY_GAIN;
+    public static final ForgeConfigSpec.DoubleValue HAKAI_LEGACY_STARTING_MASTERY;
     public static final ForgeConfigSpec.DoubleValue SPHERE_REQUIRED_EGO;
     public static final ForgeConfigSpec.DoubleValue SPHERE_KI_COST;
     public static final ForgeConfigSpec.IntValue SPHERE_COOLDOWN_TICKS;
@@ -120,6 +126,19 @@ public final class BalanceConfig {
                 "Non-boss execution threshold as a fraction of current health.");
         HAKAI_EXECUTION_ENABLED = COMMON_BUILDER.comment("Allow Hakai to finish eligible non-player targets below the threshold.")
                 .define("hakai_execution_enabled", true);
+        COMMON_BUILDER.comment("Hakai progression uses DragonMineZ's native Battle Power plus a separate 0-100 technique mastery. Mastery requirements are I=10, II=25, III=50 and IV=100.");
+        HAKAI_LEVEL_1_BATTLE_POWER = commonDecimal("hakai_level_1_battle_power", 100000.0, 0.0, 1.0E15,
+                "Battle Power required for Hakai I (matter).");
+        HAKAI_LEVEL_2_BATTLE_POWER = commonDecimal("hakai_level_2_battle_power", 1000000.0, 0.0, 1.0E15,
+                "Battle Power required for Hakai II (energy).");
+        HAKAI_LEVEL_3_BATTLE_POWER = commonDecimal("hakai_level_3_battle_power", 10000000.0, 0.0, 1.0E15,
+                "Battle Power required for Hakai III (living targets).");
+        HAKAI_LEVEL_4_BATTLE_POWER = commonDecimal("hakai_level_4_battle_power", 100000000.0, 0.0, 1.0E15,
+                "Battle Power required for Hakai IV (true erasure). Players, pets and bosses remain protected.");
+        HAKAI_MASTERY_GAIN = commonDecimal("hakai_mastery_gain_per_hit", 0.50, 0.0, 100.0,
+                "Base Hakai mastery gained when the projectile reaches its marked target.");
+        HAKAI_LEGACY_STARTING_MASTERY = commonDecimal("hakai_legacy_starting_mastery", 50.0, 0.0, 100.0,
+                "Initial Hakai mastery granted once to players who already mastered Ultra Ego before this system was installed.");
 
         COMMON_BUILDER.comment("Sphere of Destruction uses DragonMineZ's native Death Ball entity, renderer, collision and explosion. Block destruction remains disabled.");
         SPHERE_REQUIRED_EGO = commonDecimal("sphere_required_ego", 50.0, 0.0, 100.0,

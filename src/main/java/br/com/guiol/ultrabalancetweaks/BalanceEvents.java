@@ -15,6 +15,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -29,6 +30,7 @@ public final class BalanceEvents {
     public void onServerAboutToStart(ServerAboutToStartEvent event) {
         FormTuning.apply();
         InstinctTechnique.installNativeStackForm();
+        SuperKamehameha.install();
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -192,6 +194,10 @@ public final class BalanceEvents {
             InstinctTechnique.checkMasteryRewards(player);
             InstinctTechnique.validateActiveState(player);
         }
+        if (player.tickCount % 100 == 0) {
+            FormTuning.applyRuntimeTuning();
+            FormTuning.applyAttributeMultipliers();
+        }
         InstinctCounterData.tick(player);
 
         boolean active = DmzForms.isUltraEgo(player);
@@ -228,6 +234,13 @@ public final class BalanceEvents {
             EgoData.setGauge(player, 0.0f);
             InstinctCounterData.clear(player);
             BalanceNetwork.syncEgo(player, false, 0.0f);
+        }
+    }
+
+    @SubscribeEvent
+    public void removeTrueHakaiDrops(LivingDropsEvent event) {
+        if (event.getEntity().getPersistentData().getBoolean(DestructionAbilities.HAKAI_ERASED_MARKER)) {
+            event.getDrops().clear();
         }
     }
 

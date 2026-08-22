@@ -2,8 +2,11 @@ package br.com.guiol.ultrabalancetweaks;
 
 import br.com.guiol.ultrabalancetweaks.network.BalanceNetwork;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
 
@@ -54,6 +57,40 @@ public final class InstinctCounterData {
         tag.putLong(COOLDOWN_KEY, now + tuning.cooldownTicks().get());
         clearWindow(player);
         return multiplier;
+    }
+
+    public static void execute(ServerPlayer player) {
+        CompoundTag tag = player.getPersistentData();
+        long now = player.level().getGameTime();
+        if (!tag.hasUUID(TARGET_KEY) || now > tag.getLong(EXPIRES_KEY)
+                || !tag.getString(FORM_KEY).equals(currentForm(player))) {
+            clearWindow(player);
+            return;
+        }
+
+        if (!(player.serverLevel().getEntity(tag.getUUID(TARGET_KEY)) instanceof LivingEntity target)
+                || !target.isAlive() || target == player || player.distanceToSqr(target) > 24.0 * 24.0) {
+            clearWindow(player);
+            return;
+        }
+
+        player.lookAt(EntityAnchorArgument.Anchor.EYES,
+                target.getEyePosition().subtract(0.0, target.getBbHeight() * 0.12, 0.0));
+        Vec3 approach = target.position().subtract(player.position());
+        double horizontal = Math.sqrt(approach.x * approach.x + approach.z * approach.z);
+        if (horizontal > 2.35) {
+            double impulse = Math.min(1.35, Math.max(0.45, (horizontal - 1.8) * 0.22));
+            player.setDeltaMovement(approach.x / horizontal * impulse,
+                    Math.max(player.getDeltaMovement().y, 0.12), approach.z / horizontal * impulse);
+            player.hurtMarked = true;
+        }
+
+        player.resetAttackStrengthTicker();
+        player.swing(InteractionHand.MAIN_HAND, true);
+        player.attack(target);
+        if (tag.hasUUID(TARGET_KEY)) {
+            clearWindow(player);
+        }
     }
 
     public static void tick(ServerPlayer player) {
