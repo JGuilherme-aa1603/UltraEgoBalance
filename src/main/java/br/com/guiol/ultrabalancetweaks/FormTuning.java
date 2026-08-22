@@ -70,6 +70,9 @@ public final class FormTuning {
         data.setSkpMultiplier(tuning.skill().get());
         data.setPwrMultiplier(tuning.kiPower().get());
         data.setDefMultiplier(tuning.defense().get());
+        // DragonMineZ displays RES as the mean of DEF and STM. Keeping both aligned
+        // makes the configured resistance value exact in the UI and in calculations.
+        data.setStmMultiplier(tuning.defense().get());
         data.setMaxStatsMultiplier(1.0);
         return 1;
     }

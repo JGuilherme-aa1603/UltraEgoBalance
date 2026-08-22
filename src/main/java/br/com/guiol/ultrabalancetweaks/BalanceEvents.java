@@ -28,6 +28,10 @@ import org.unofficial.unofficialdmzaddon.network.AddonNetwork;
 public final class BalanceEvents {
     @SubscribeEvent
     public void onServerAboutToStart(ServerAboutToStartEvent event) {
+        if (BalanceConfig.migrateLegacyHakaiBattlePowerThresholds()) {
+            UltraBalanceTweaks.LOGGER.info(
+                    "Migrated default Hakai Battle Power thresholds to 10,000 / 100,000 / 750,000 / 3,000,000");
+        }
         FormTuning.apply();
         InstinctTechnique.installNativeStackForm();
         SuperKamehameha.install();
