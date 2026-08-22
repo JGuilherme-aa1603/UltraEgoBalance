@@ -15,6 +15,7 @@ public final class BalanceConfig {
     public static final ForgeConfigSpec.DoubleValue EGO_DECAY_PER_SECOND;
     public static final ForgeConfigSpec.DoubleValue EGO_VIT_MULTIPLIER;
     public static final ForgeConfigSpec.DoubleValue EGO_STAMINA_DRAIN;
+    public static final ForgeConfigSpec.DoubleValue EGO_MAX_PWR_MULTIPLIER;
     public static final ForgeConfigSpec.DoubleValue HAKAI_REQUIRED_EGO;
     public static final ForgeConfigSpec.DoubleValue HAKAI_KI_COST;
     public static final ForgeConfigSpec.IntValue HAKAI_COOLDOWN_TICKS;
@@ -45,6 +46,23 @@ public final class BalanceConfig {
     public static final PrecisionTuning SIGN_PRECISION;
     public static final PrecisionTuning MASTERED_PRECISION;
     public static final PrecisionTuning TRUE_PRECISION;
+    public static final CounterTuning SIGN_COUNTER;
+    public static final CounterTuning MASTERED_COUNTER;
+    public static final CounterTuning TRUE_COUNTER;
+
+    public static final FormMultipliers SSJ1_MULTIPLIERS;
+    public static final FormMultipliers SSJ2_MULTIPLIERS;
+    public static final FormMultipliers SSJ3_MULTIPLIERS;
+    public static final FormMultipliers SSJ4_MULTIPLIERS;
+    public static final FormMultipliers SSJ_GOD_MULTIPLIERS;
+    public static final FormMultipliers SSJ_BLUE_MULTIPLIERS;
+    public static final FormMultipliers SSJ_BLUE_EVOLVED_MULTIPLIERS;
+    public static final FormMultipliers LEGENDARY_SSJ_MULTIPLIERS;
+    public static final FormMultipliers ULTRA_EGO_MULTIPLIERS;
+    public static final FormMultipliers BEAST_MULTIPLIERS;
+    public static final FormMultipliers UI_SIGN_MULTIPLIERS;
+    public static final FormMultipliers UI_MASTERED_MULTIPLIERS;
+    public static final FormMultipliers UI_TRUE_MULTIPLIERS;
 
     public static final ForgeConfigSpec.BooleanValue HUD_ENABLED;
     public static final ForgeConfigSpec.IntValue HUD_X_OFFSET;
@@ -76,6 +94,8 @@ public final class BalanceConfig {
                 "Runtime VIT multiplier. The DragonMineZ JSON is never overwritten.");
         EGO_STAMINA_DRAIN = commonDecimal("stamina_drain", 0.045, 0.0, 2.0,
                 "Runtime stamina drain. The DragonMineZ JSON is never overwritten.");
+        EGO_MAX_PWR_MULTIPLIER = commonDecimal("max_power_multiplier", 13.0, 1.0, 100.0,
+                "Effective Ki Power multiplier at 100 Ego. It grows from the Ultra Ego form's base Power multiplier.");
         COMMON_BUILDER.pop();
 
         COMMON_BUILDER.push("destruction");
@@ -142,7 +162,30 @@ public final class BalanceConfig {
         SIGN_PRECISION = precision("sign", 0.10, 1.15);
         MASTERED_PRECISION = precision("mastered", 0.15, 1.20);
         TRUE_PRECISION = precision("true", 0.20, 1.30);
+
+        COMMON_BUILDER.comment("A successful dodge arms a counter against that attacker. The next normal hit inside the window receives the configured bonus; precision cannot stack on the same hit.");
+        SIGN_COUNTER = counter("sign", 12, 1.15, 30);
+        MASTERED_COUNTER = counter("mastered", 16, 1.35, 20);
+        TRUE_COUNTER = counter("true", 16, 1.35, 20);
         COMMON_BUILDER.pop();
+
+        COMMON_BUILDER.push("saiyan_form_multipliers");
+        COMMON_BUILDER.comment("Non-persistent runtime multipliers for Saiyan transformations. The four values are Strength, Skill/speed, Ki Power and Defense/resistance.");
+        SSJ1_MULTIPLIERS = formMultipliers("ssj1", 2.5, 2.5, 2.5, 1.8);
+        SSJ2_MULTIPLIERS = formMultipliers("ssj2", 4.0, 4.0, 4.0, 2.5);
+        SSJ3_MULTIPLIERS = formMultipliers("ssj3", 6.0, 6.0, 6.0, 3.5);
+        SSJ4_MULTIPLIERS = formMultipliers("ssj4", 8.0, 8.0, 8.0, 4.5);
+        SSJ_GOD_MULTIPLIERS = formMultipliers("ssj_god", 10.0, 10.0, 10.0, 5.2);
+        SSJ_BLUE_MULTIPLIERS = formMultipliers("ssj_blue", 12.0, 12.0, 12.0, 6.0);
+        SSJ_BLUE_EVOLVED_MULTIPLIERS = formMultipliers("ssj_blue_evolved", 12.5, 12.0, 12.5, 6.5);
+        LEGENDARY_SSJ_MULTIPLIERS = formMultipliers("legendary_ssj_full_power", 12.5, 11.5, 12.5, 8.0);
+        ULTRA_EGO_MULTIPLIERS = formMultipliers("ultra_ego", 11.0, 10.5, 11.0, 7.0);
+        BEAST_MULTIPLIERS = formMultipliers("beast", 14.0, 13.0, 14.0, 7.5);
+        UI_SIGN_MULTIPLIERS = formMultipliers("ultra_instinct_sign", 10.5, 12.0, 10.5, 5.5);
+        UI_MASTERED_MULTIPLIERS = formMultipliers("ultra_instinct_mastered", 12.5, 14.0, 12.5, 6.5);
+        UI_TRUE_MULTIPLIERS = formMultipliers("ultra_instinct_true", 12.5, 14.0, 12.5, 6.5);
+        COMMON_BUILDER.pop();
+
         COMMON_SPEC = COMMON_BUILDER.build();
 
         CLIENT_BUILDER.push("ego_hud");
@@ -178,6 +221,33 @@ public final class BalanceConfig {
         return new PrecisionTuning(chanceValue, damageValue);
     }
 
+    private static CounterTuning counter(String key, int windowTicks, double damage, int cooldownTicks) {
+        COMMON_BUILDER.push(key + "_counter");
+        ForgeConfigSpec.IntValue window = COMMON_BUILDER.comment("Counter window in ticks after a successful dodge.")
+                .defineInRange("window_ticks", windowTicks, 1, 200);
+        ForgeConfigSpec.DoubleValue damageValue = commonDecimal("damage_multiplier", damage, 1.0, 5.0,
+                "Damage multiplier for the counter hit.");
+        ForgeConfigSpec.IntValue cooldown = COMMON_BUILDER.comment("Counter cooldown in ticks after a successful counter.")
+                .defineInRange("cooldown_ticks", cooldownTicks, 0, 1200);
+        COMMON_BUILDER.pop();
+        return new CounterTuning(window, damageValue, cooldown);
+    }
+
+    private static FormMultipliers formMultipliers(String key, double strength, double skill,
+                                                    double kiPower, double defense) {
+        COMMON_BUILDER.push(key);
+        ForgeConfigSpec.DoubleValue strengthValue = commonDecimal("strength", strength, 0.0, 100.0,
+                "Strength multiplier for this form.");
+        ForgeConfigSpec.DoubleValue skillValue = commonDecimal("skill", skill, 0.0, 100.0,
+                "Skill/speed multiplier for this form.");
+        ForgeConfigSpec.DoubleValue kiPowerValue = commonDecimal("ki_power", kiPower, 0.0, 100.0,
+                "Ki Power multiplier for this form.");
+        ForgeConfigSpec.DoubleValue defenseValue = commonDecimal("defense", defense, 0.0, 100.0,
+                "Defense/resistance multiplier for this form.");
+        COMMON_BUILDER.pop();
+        return new FormMultipliers(strengthValue, skillValue, kiPowerValue, defenseValue);
+    }
+
     private static ForgeConfigSpec.DoubleValue commonDecimal(String key, double value, double min, double max, String comment) {
         COMMON_BUILDER.comment(comment);
         return COMMON_BUILDER.defineInRange(key, value, min, max);
@@ -190,4 +260,16 @@ public final class BalanceConfig {
     public record PrecisionTuning(ForgeConfigSpec.DoubleValue chanceAtFull,
                                   ForgeConfigSpec.DoubleValue damageAtFull) {
     }
+
+    public record CounterTuning(ForgeConfigSpec.IntValue windowTicks,
+                                ForgeConfigSpec.DoubleValue damageMultiplier,
+                                ForgeConfigSpec.IntValue cooldownTicks) {
+    }
+
+    public record FormMultipliers(ForgeConfigSpec.DoubleValue strength,
+                                  ForgeConfigSpec.DoubleValue skill,
+                                  ForgeConfigSpec.DoubleValue kiPower,
+                                  ForgeConfigSpec.DoubleValue defense) {
+    }
+
 }

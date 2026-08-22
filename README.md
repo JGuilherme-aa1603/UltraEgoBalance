@@ -10,11 +10,34 @@ Addon pessoal para Forge 1.20.1 criado para equilibrar as formas divinas de fim 
 
 O Instinto Superior representa controle, eficiência e sobrevivência. O Ultra Ego representa risco, resistência e poder destrutivo crescente. As duas escolhas têm forças bem diferentes, sem apagar a identidade mostrada no mangá de Dragon Ball Super.
 
+## Multiplicadores Saiyajin — versão 1.4.0
+
+Os valores são aplicados em memória apenas à raça Saiyajin e representam força, skill/velocidade, poder de Ki e defesa/resistência. Os JSONs originais permanecem intactos.
+
+| Transformação | Força | Velocidade | Poder | Resistência |
+|---|---:|---:|---:|---:|
+| Super Saiyajin 1 | x2,5 | x2,5 | x2,5 | x1,8 |
+| Super Saiyajin 2 | x4,0 | x4,0 | x4,0 | x2,5 |
+| Super Saiyajin 3 | x6,0 | x6,0 | x6,0 | x3,5 |
+| Super Saiyajin 4 | x8,0 | x8,0 | x8,0 | x4,5 |
+| Super Saiyajin God | x10,0 | x10,0 | x10,0 | x5,2 |
+| Super Saiyajin Blue | x12,0 | x12,0 | x12,0 | x6,0 |
+| Super Saiyajin Blue Evolved | x12,5 | x12,0 | x12,5 | x6,5 |
+| Legendary Super Saiyajin (Full Power) | x12,5 | x11,5 | x12,5 | x8,0 |
+| Ultra Ego | x11,0 | x10,5 | x11,0–13,0 | x7,0 |
+| Beast | x14,0 | x13,0 | x14,0 | x7,5 |
+| Instinto Superior SIGN | x10,5 | x12,0 | x10,5 | x5,5 |
+| Instinto Superior MASTERED | x12,5 | x14,0 | x12,5 | x6,5 |
+| Instinto Superior TRUE | x12,5 | x14,0 | x12,5 | x6,5 |
+
+Todos os valores-base podem ser alterados na seção `saiyan_form_multipliers` do arquivo comum de configuração. O SSJ4 é tratado nas duas variantes internas usadas pelo DMZ, e Legendary SSJ corresponde à forma Full Power.
+
 ## Ultra Ego
 
 - Substitui o bônus baseado na vida atual por um medidor persistente de Ego de 0 a 100.
 - Dano recebido enche o medidor; por padrão, receber dano cumulativo equivalente a cerca de 60% da vida máxima chega a 100.
 - O multiplicador especial de dano cresce suavemente de x1,05 até x1,60.
+- O Poder de Ki cresce de x11,0 até x13,0 junto do medidor, sem substituir o multiplicador especial: com Ego cheio, ataques de Ki alcançam potencial efetivo próximo de x20,8.
 - A penetração de defesa cresce de 0% até 20%.
 - Todo dano recebido é reduzido em 15% enquanto a forma está ativa.
 - Cura normal remove apenas metade do percentual curado do medidor. A regeneração passiva rápida do DMZ não apaga imediatamente o progresso.
@@ -61,12 +84,26 @@ As teclas podem ser alteradas normalmente em **Opções → Controles → Ultra 
 - O MASTERED conserva 90% de esquiva e consome 1,8% do Ki máximo.
 - O TRUE possui 80% de esquiva, mas seu custo foi reduzido de 2,1% para 1,2% do Ki máximo.
 - O proc ofensivo exagerado do addon original é substituído por golpes de precisão menores e específicos para cada estágio.
+- Cada esquiva bem-sucedida abre uma janela de contra-ataque contra o agressor. O próximo acerto válido recebe o bônus, e contra-ataque nunca acumula com precisão.
 
 | Forma | Chance de esquiva | Custo por esquiva | Precisão em maestria máxima |
 |---|---:|---:|---:|
 | Sinal | 70% | 2,0% | 10% de chance, x1,15 |
 | Completo | 90% | 1,8% | 15% de chance, x1,20 |
 | Verdadeiro | 80% | 1,2% | 20% de chance, x1,30 |
+
+### Contra-ataque instintivo
+
+| Forma | Janela | Dano | Cooldown após acertar |
+|---|---:|---:|---:|
+| SIGN | 0,6 s | x1,15 | 1,5 s |
+| MASTERED | 0,8 s | x1,35 | 1,0 s |
+| TRUE | 0,8 s | x1,35 | 1,0 s |
+
+- Só pode atingir o agressor da esquiva e usa o cálculo normal de dano do DMZ.
+- Hakai e Esfera da Destruição não podem consumir nem receber o bônus.
+- Um indicador prateado junto da mira mostra a janela restante e o multiplicador.
+- MASTERED e TRUE possuem o mesmo contra-ataque; MASTERED conserva mais esquiva, enquanto TRUE conserva o menor custo de Ki.
 
 ### Técnica do Instinto — Sinal
 

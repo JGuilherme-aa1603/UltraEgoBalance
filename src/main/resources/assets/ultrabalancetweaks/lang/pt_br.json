@@ -2,6 +2,8 @@
   "gui.ultrabalancetweaks.ego": "ULTRA EGO",
   "gui.ultrabalancetweaks.ego_full": "DESTRUIÇÃO LIBERADA",
   "gui.ultrabalancetweaks.aura": "AURA",
+  "gui.ultrabalancetweaks.power": "PODER ×%s",
+  "gui.ultrabalancetweaks.counter_ready": "CONTRA-ATAQUE %s",
   "gui.ultrabalancetweaks.hakai_short": "HAKAI",
   "gui.ultrabalancetweaks.sphere_short": "ESFERA",
   "gui.ultrabalancetweaks.ready_short": "OK",

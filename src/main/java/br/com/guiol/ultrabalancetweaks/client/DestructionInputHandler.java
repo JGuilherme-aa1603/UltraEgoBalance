@@ -21,6 +21,7 @@ public final class DestructionInputHandler {
             return;
         }
         ClientDestructionState.tick();
+        ClientCounterState.tick();
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player == null || minecraft.screen != null) {
             return;
@@ -39,6 +40,7 @@ public final class DestructionInputHandler {
     @SubscribeEvent
     public static void loggedOut(ClientPlayerNetworkEvent.LoggingOut event) {
         ClientDestructionState.clear();
+        ClientCounterState.clear();
         ClientEgoState.update(false, 0.0f);
     }
 }

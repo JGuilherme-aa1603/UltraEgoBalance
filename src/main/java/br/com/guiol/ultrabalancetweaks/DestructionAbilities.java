@@ -57,6 +57,11 @@ public final class DestructionAbilities {
         return entity instanceof KiBlastEntity && entity.getPersistentData().getBoolean(SPHERE_MARKER);
     }
 
+    public static boolean isDestructionProjectile(Entity entity) {
+        return entity instanceof KiBlastEntity && (entity.getPersistentData().getBoolean(HAKAI_MARKER)
+                || entity.getPersistentData().getBoolean(SPHERE_MARKER));
+    }
+
     public static void adjustNativeDestructionDamage(LivingHurtEvent event) {
         Entity direct = event.getSource().getDirectEntity();
         if (!(direct instanceof KiBlastEntity projectile)) {

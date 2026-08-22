@@ -10,6 +10,8 @@ import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.Locale;
+
 @Mod.EventBusSubscriber(modid = UltraBalanceTweaks.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class EgoHudOverlay {
     private EgoHudOverlay() {
@@ -76,6 +78,14 @@ public final class EgoHudOverlay {
         }
         int textColor = gauge >= 95.0f ? 0xFFF0B6 : 0xE9C8FF;
         graphics.drawCenteredString(minecraft.font, label, x + width / 2, y - 11, textColor);
+
+        double ratio = Math.max(0.0, Math.min(1.0, gauge / 100.0));
+        double basePower = BalanceConfig.ULTRA_EGO_MULTIPLIERS.kiPower().get();
+        double currentPower = basePower
+                + (BalanceConfig.EGO_MAX_PWR_MULTIPLIER.get() - basePower) * ratio;
+        String power = Component.translatable("gui.ultrabalancetweaks.power",
+                String.format(Locale.ROOT, "%.1f", currentPower)).getString();
+        graphics.drawCenteredString(minecraft.font, power, x + width / 2, y - 21, 0xDAB6F3FF);
 
         if (BalanceConfig.HUD_SHOW_ABILITIES.get()) {
             int gap = 4;

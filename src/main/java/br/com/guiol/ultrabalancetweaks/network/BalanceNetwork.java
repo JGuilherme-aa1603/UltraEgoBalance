@@ -12,7 +12,7 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public final class BalanceNetwork {
-    private static final String PROTOCOL = "3";
+    private static final String PROTOCOL = "4";
     private static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
             .named(ResourceLocation.fromNamespaceAndPath(UltraBalanceTweaks.MOD_ID, "main"))
             .networkProtocolVersion(() -> PROTOCOL)
@@ -33,6 +33,8 @@ public final class BalanceNetwork {
         CHANNEL.registerMessage(3, InstinctTechniqueRequestPacket.class,
                 InstinctTechniqueRequestPacket::encode, InstinctTechniqueRequestPacket::decode,
                 InstinctTechniqueRequestPacket::handle);
+        CHANNEL.registerMessage(4, CounterSyncPacket.class,
+                CounterSyncPacket::encode, CounterSyncPacket::decode, CounterSyncPacket::handle);
     }
 
     public static void syncEgo(ServerPlayer player, boolean active, float gauge) {
@@ -57,5 +59,10 @@ public final class BalanceNetwork {
                 InstinctTechnique.destructionUnlocked(player),
                 InstinctTechnique.unlocked(player),
                 InstinctTechnique.isActive(player)));
+    }
+
+    public static void syncCounter(ServerPlayer player, int remainingTicks, float multiplier) {
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player),
+                new CounterSyncPacket(remainingTicks, multiplier));
     }
 }

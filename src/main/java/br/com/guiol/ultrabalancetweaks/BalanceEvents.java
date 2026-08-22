@@ -93,6 +93,7 @@ public final class BalanceEvents {
         data.getResources().removeEnergy(kiCost);
         event.setCanceled(true);
         playDodge(victim, attacker, form, mastery);
+        InstinctCounterData.arm(victim, attacker, form);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -134,9 +135,9 @@ public final class BalanceEvents {
             } else {
                 DmzForms.ActiveForm instinct = DmzForms.activeUltraInstinct(attacker);
                 if (instinct != null) {
-                    applyUltraInstinctPrecision(event, attacker, instinct.form(), instinct.masteryRatio());
+                    applyInstinctOffense(event, attacker, instinct.form(), instinct.masteryRatio());
                 } else if (InstinctTechnique.isActive(attacker)) {
-                    applyUltraInstinctPrecision(event, attacker, "sign", 1.0);
+                    applyInstinctOffense(event, attacker, "sign", 1.0);
                 }
             }
         }
@@ -155,12 +156,17 @@ public final class BalanceEvents {
     }
 
     @SubscribeEvent
-    public void applyDestructionPenetration(DMZEvent.DamageModifyEvent event) {
+    public void applyUltraEgoCombatScaling(DMZEvent.DamageModifyEvent event) {
         Player attacker = event.getAttacker();
         if (!(attacker instanceof ServerPlayer serverPlayer) || !DmzForms.isUltraEgo(serverPlayer)) {
             return;
         }
         double ratio = EgoData.gauge(serverPlayer) / 100.0;
+        if (event.getSourceType() == DMZEvent.DamageSourceType.KI) {
+            double basePower = Math.max(0.01, BalanceConfig.ULTRA_EGO_MULTIPLIERS.kiPower().get());
+            double currentPower = lerp(basePower, BalanceConfig.EGO_MAX_PWR_MULTIPLIER.get(), ratio);
+            event.setAmount(event.getAmount() * currentPower / basePower);
+        }
         event.setDefensePenetration(event.getDefensePenetration()
                 + BalanceConfig.EGO_MAX_DEFENSE_PENETRATION.get() * ratio);
     }
@@ -186,6 +192,7 @@ public final class BalanceEvents {
             InstinctTechnique.checkMasteryRewards(player);
             InstinctTechnique.validateActiveState(player);
         }
+        InstinctCounterData.tick(player);
 
         boolean active = DmzForms.isUltraEgo(player);
         float gauge = EgoData.gauge(player);
@@ -211,6 +218,7 @@ public final class BalanceEvents {
             boolean active = DmzForms.isUltraEgo(player);
             BalanceNetwork.syncEgo(player, active, active ? EgoData.gauge(player) : 0.0f);
             BalanceNetwork.syncDestruction(player);
+            BalanceNetwork.syncCounter(player, 0, 1.0f);
         }
     }
 
@@ -218,6 +226,7 @@ public final class BalanceEvents {
     public void onDeath(LivingDeathEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             EgoData.setGauge(player, 0.0f);
+            InstinctCounterData.clear(player);
             BalanceNetwork.syncEgo(player, false, 0.0f);
         }
     }
@@ -231,8 +240,17 @@ public final class BalanceEvents {
         event.setAmount((float) (event.getAmount() / originalMultiplier * newMultiplier));
     }
 
-    private static void applyUltraInstinctPrecision(LivingHurtEvent event, ServerPlayer attacker,
-                                                     String form, double masteryRatio) {
+    private static void applyInstinctOffense(LivingHurtEvent event, ServerPlayer attacker,
+                                             String form, double masteryRatio) {
+        if (!DestructionAbilities.isDestructionProjectile(event.getSource().getDirectEntity())) {
+            double counterMultiplier = InstinctCounterData.consume(attacker, event.getEntity());
+            if (counterMultiplier > 1.0 + 1.0E-6) {
+                event.setAmount((float) (event.getAmount() * counterMultiplier));
+                playCounter(attacker, event.getEntity());
+                return;
+            }
+        }
+
         BalanceConfig.PrecisionTuning tuning = precisionTuning(form);
         double development = 0.5 + 0.5 * masteryRatio;
         double chance = tuning.chanceAtFull().get() * development;
@@ -248,6 +266,17 @@ public final class BalanceEvents {
             level.playSound(null, event.getEntity().blockPosition(), SoundEvents.PLAYER_ATTACK_CRIT,
                     SoundSource.PLAYERS, 0.8f, 1.15f);
         }
+    }
+
+    private static void playCounter(ServerPlayer attacker, LivingEntity target) {
+        ServerLevel level = attacker.serverLevel();
+        Vec3 center = target.position().add(0.0, target.getBbHeight() * 0.55, 0.0);
+        level.sendParticles(ParticleTypes.END_ROD, center.x, center.y, center.z,
+                24, 0.22, 0.32, 0.22, 0.045);
+        level.sendParticles(ParticleTypes.CRIT, center.x, center.y, center.z,
+                18, 0.18, 0.25, 0.18, 0.08);
+        level.playSound(null, target.blockPosition(), SoundEvents.PLAYER_ATTACK_CRIT,
+                SoundSource.PLAYERS, 1.0f, 1.35f);
     }
 
     private static void playDodge(ServerPlayer victim, LivingEntity attacker, String form, double mastery) {
