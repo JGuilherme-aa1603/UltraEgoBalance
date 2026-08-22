@@ -10,7 +10,7 @@ Addon pessoal para Forge 1.20.1 criado para equilibrar as formas divinas de fim 
 
 O Instinto Superior representa controle, eficiência e sobrevivência. O Ultra Ego representa risco, resistência e poder destrutivo crescente. As duas escolhas têm forças bem diferentes, sem apagar a identidade mostrada no mangá de Dragon Ball Super.
 
-## Multiplicadores Saiyajin — versão 1.5.0
+## Multiplicadores Saiyajin — versão 1.5.1
 
 Os valores são aplicados e verificados em memória, no servidor e no cliente, apenas para a raça Saiyajin. Eles representam o multiplicador final de força, skill/velocidade, poder de Ki e defesa/resistência; o bônus oculto de até 35% por maestria do DMZ é neutralizado nessas formas para a tabela permanecer exata. Os JSONs originais permanecem intactos.
 
@@ -45,7 +45,7 @@ Todos os valores-base podem ser alterados na seção `saiyan_form_multipliers` d
 - Sair da forma ou morrer zera o medidor.
 - VIT é ajustado para x1,60 e o consumo de stamina para 0,045 apenas em memória; nenhum JSON original é alterado.
 
-## Técnicas de Destruição — versão 1.5.0
+## Técnicas de Destruição — versão 1.5.1
 
 Ao alcançar **100 de maestria no Ultra Ego**, Hakai e Esfera da Destruição são aprendidos permanentemente e podem ser usados na forma base ou sobre qualquer outra transformação. Fora do Ultra Ego, eles dispensam o medidor de Ego, mas conservam custo de Ki, cooldown, progressão e proteções. No Ultra Ego, continuam exigindo o nível configurado do medidor.
 
@@ -129,6 +129,14 @@ Ao alcançar **100 de maestria no Instinto Superior Verdadeiro**, a tecla **K** 
 - Pulso, partículas, som e mensagem quando chega a 100.
 - Posição, largura, percentual e visibilidade podem ser configurados.
 - O chip do Hakai mostra também o nível atual em algarismos romanos.
+
+## HUD de maestria do Hakai
+
+- Fica visível em qualquer transformação depois que a Destruição é desbloqueada com 100 de maestria no Ultra Ego.
+- Mostra o nível atual, a maestria exata de 0 a 100 e uma barra com marcos em 10, 25 e 50.
+- A linha inferior mostra o próximo nível e compara o Poder de Batalha atual com o requisito configurado no servidor.
+- Ao chegar ao Hakai IV com 100 de maestria, o medidor muda para o estado dourado de domínio total.
+- A posição pode ser ajustada separadamente no arquivo de configuração do cliente; quando o Ultra Ego está ativo, o medidor sobe automaticamente para não cobrir a barra de Ego.
 
 ## Super Kamehameha
 

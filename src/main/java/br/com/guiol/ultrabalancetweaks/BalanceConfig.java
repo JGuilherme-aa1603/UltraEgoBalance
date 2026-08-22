@@ -76,6 +76,9 @@ public final class BalanceConfig {
     public static final ForgeConfigSpec.IntValue HUD_WIDTH;
     public static final ForgeConfigSpec.BooleanValue HUD_SHOW_NUMERIC_VALUE;
     public static final ForgeConfigSpec.BooleanValue HUD_SHOW_ABILITIES;
+    public static final ForgeConfigSpec.BooleanValue HAKAI_HUD_ENABLED;
+    public static final ForgeConfigSpec.IntValue HAKAI_HUD_X_OFFSET;
+    public static final ForgeConfigSpec.IntValue HAKAI_HUD_Y_OFFSET;
 
     public static final ForgeConfigSpec COMMON_SPEC;
     public static final ForgeConfigSpec CLIENT_SPEC;
@@ -215,6 +218,14 @@ public final class BalanceConfig {
         HUD_SHOW_NUMERIC_VALUE = CLIENT_BUILDER.comment("Show the exact percentage inside the gauge.").define("show_numeric_value", true);
         HUD_SHOW_ABILITIES = CLIENT_BUILDER.comment("Show Hakai and Sphere of Destruction readiness below the gauge.")
                 .define("show_abilities", true);
+        CLIENT_BUILDER.pop();
+        CLIENT_BUILDER.push("hakai_mastery_hud");
+        HAKAI_HUD_ENABLED = CLIENT_BUILDER.comment("Show Hakai level, exact mastery and next Battle Power requirement after unlocking Destruction.")
+                .define("enabled", true);
+        HAKAI_HUD_X_OFFSET = CLIENT_BUILDER.comment("Horizontal offset from screen center.")
+                .defineInRange("x_offset", 0, -4096, 4096);
+        HAKAI_HUD_Y_OFFSET = CLIENT_BUILDER.comment("Vertical offset from the automatic position.")
+                .defineInRange("y_offset", 0, -4096, 4096);
         CLIENT_BUILDER.pop();
         CLIENT_SPEC = CLIENT_BUILDER.build();
     }

@@ -13,7 +13,7 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public final class BalanceNetwork {
-    private static final String PROTOCOL = "5";
+    private static final String PROTOCOL = "6";
     private static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
             .named(ResourceLocation.fromNamespaceAndPath(UltraBalanceTweaks.MOD_ID, "main"))
             .networkProtocolVersion(() -> PROTOCOL)
@@ -57,6 +57,8 @@ public final class BalanceNetwork {
     }
 
     public static void syncDestruction(ServerPlayer player) {
+        int hakaiLevel = HakaiProgressData.level(player);
+        int nextHakaiLevel = Math.min(4, hakaiLevel + 1);
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new DestructionSyncPacket(
                 DestructionData.cooldown(player, DestructionAbility.HAKAI),
                 DestructionData.cooldown(player, DestructionAbility.SPHERE),
@@ -66,9 +68,11 @@ public final class BalanceNetwork {
                 InstinctTechnique.destructionUnlocked(player),
                 InstinctTechnique.unlocked(player),
                 InstinctTechnique.isActive(player),
-                HakaiProgressData.level(player),
+                hakaiLevel,
                 HakaiProgressData.mastery(player),
-                HakaiProgressData.battlePower(player)));
+                HakaiProgressData.battlePower(player),
+                HakaiProgressData.masteryRequirement(nextHakaiLevel),
+                HakaiProgressData.battlePowerRequirement(nextHakaiLevel)));
     }
 
     public static void syncCounter(ServerPlayer player, int remainingTicks, float multiplier) {

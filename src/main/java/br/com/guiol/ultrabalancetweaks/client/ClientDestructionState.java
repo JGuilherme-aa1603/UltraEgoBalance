@@ -12,13 +12,16 @@ public final class ClientDestructionState {
     private static int hakaiLevel;
     private static float hakaiMastery;
     private static double battlePower;
+    private static float nextHakaiMastery;
+    private static double nextHakaiBattlePower;
 
     private ClientDestructionState() {
     }
 
     public static void update(int hakaiTicks, int sphereTicks, float hakaiEgo, float sphereEgo, float auraEgo,
                               boolean learnedDestruction, boolean learnedInstinct, boolean activeInstinct,
-                              int level, float mastery, double currentBattlePower) {
+                              int level, float mastery, double currentBattlePower,
+                              float nextMastery, double nextBattlePower) {
         hakaiCooldown = Math.max(0, hakaiTicks);
         sphereCooldown = Math.max(0, sphereTicks);
         hakaiRequirement = hakaiEgo;
@@ -30,6 +33,8 @@ public final class ClientDestructionState {
         hakaiLevel = Math.max(0, Math.min(4, level));
         hakaiMastery = Math.max(0.0f, Math.min(100.0f, mastery));
         battlePower = Math.max(0.0, currentBattlePower);
+        nextHakaiMastery = Math.max(0.0f, Math.min(100.0f, nextMastery));
+        nextHakaiBattlePower = Math.max(0.0, nextBattlePower);
     }
 
     public static void tick() {
@@ -85,6 +90,14 @@ public final class ClientDestructionState {
         return battlePower;
     }
 
+    public static float nextHakaiMastery() {
+        return nextHakaiMastery;
+    }
+
+    public static double nextHakaiBattlePower() {
+        return nextHakaiBattlePower;
+    }
+
     public static String hakaiLevelRoman() {
         return switch (hakaiLevel) {
             case 4 -> "IV";
@@ -104,5 +117,7 @@ public final class ClientDestructionState {
         hakaiLevel = 0;
         hakaiMastery = 0.0f;
         battlePower = 0.0;
+        nextHakaiMastery = 0.0f;
+        nextHakaiBattlePower = 0.0;
     }
 }

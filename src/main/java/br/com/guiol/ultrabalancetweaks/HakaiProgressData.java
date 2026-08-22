@@ -77,6 +77,26 @@ public final class HakaiProgressData {
         return 0;
     }
 
+    public static float masteryRequirement(int targetLevel) {
+        return switch (targetLevel) {
+            case 1 -> 10.0f;
+            case 2 -> 25.0f;
+            case 3 -> 50.0f;
+            case 4 -> 100.0f;
+            default -> 0.0f;
+        };
+    }
+
+    public static double battlePowerRequirement(int targetLevel) {
+        return switch (targetLevel) {
+            case 1 -> BalanceConfig.HAKAI_LEVEL_1_BATTLE_POWER.get();
+            case 2 -> BalanceConfig.HAKAI_LEVEL_2_BATTLE_POWER.get();
+            case 3 -> BalanceConfig.HAKAI_LEVEL_3_BATTLE_POWER.get();
+            case 4 -> BalanceConfig.HAKAI_LEVEL_4_BATTLE_POWER.get();
+            default -> 0.0;
+        };
+    }
+
     public static double effectivePower(ServerPlayer player) {
         return battlePower(player) * (1.0 + 0.5 * mastery(player) / 100.0);
     }
