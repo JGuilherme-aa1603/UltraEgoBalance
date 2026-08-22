@@ -6,7 +6,9 @@
   "mixins": [
     "OriginalUltraInstinctHandlerMixin",
     "AddonAuraPolicyMixin",
-    "DivineAuraPersistenceMixin",
+    "DivineAuraPersistenceMixin"
+  ],
+  "client": [
     "BlueAuraSkinTintMixin"
   ],
   "injectors": {
