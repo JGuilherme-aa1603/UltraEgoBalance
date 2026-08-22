@@ -6,7 +6,8 @@
   "mixins": [
     "OriginalUltraInstinctHandlerMixin",
     "AddonAuraPolicyMixin",
-    "DivineAuraPersistenceMixin"
+    "DivineAuraPersistenceMixin",
+    "BlueAuraSkinTintMixin"
   ],
   "injectors": {
     "defaultRequire": 1

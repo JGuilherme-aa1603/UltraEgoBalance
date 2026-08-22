@@ -192,8 +192,38 @@ public final class DestructionAbilities {
         hakai.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0f,
                 hakai.getKiSpeed(), 0.0f);
         player.level().addFreshEntity(hakai);
+        resolvePointBlankHakai(player, target, hakai, damage, start, look);
         player.displayClientMessage(Component.translatable("message.ultrabalancetweaks.hakai_launched",
                 target.getDisplayName(), HakaiProgressData.roman(hakaiLevel)), true);
+    }
+
+    /**
+     * AbstractKiProjectile advances once before asking ProjectileUtil for the
+     * next swept hit. With Hakai's high speed, the muzzle-to-first-position
+     * segment is otherwise never tested and a nearby marked target is skipped.
+     */
+    private static void resolvePointBlankHakai(ServerPlayer player, LivingEntity target,
+                                               KiBlastEntity hakai, float damage,
+                                               Vec3 start, Vec3 look) {
+        Vec3 eye = player.getEyePosition();
+        Vec3 firstCollisionStart = start.add(look.scale(hakai.getKiSpeed()));
+        AABB targetBox = target.getBoundingBox().inflate(0.45);
+        boolean crossesBlindSegment = targetBox.contains(eye)
+                || targetBox.clip(eye, firstCollisionStart).isPresent();
+        if (!crossesBlindSegment || !hakai.applyDamageOrHeal(target, damage)) {
+            return;
+        }
+
+        hakai.onSuccessfulHit(target);
+        hakai.discard();
+        Vec3 impact = target.position().add(0.0, target.getBbHeight() * 0.55, 0.0);
+        ServerLevel level = player.serverLevel();
+        level.sendParticles(ParticleTypes.REVERSE_PORTAL, impact.x, impact.y, impact.z,
+                30, 0.28, 0.34, 0.28, 0.08);
+        level.sendParticles(PURPLE_DUST, impact.x, impact.y, impact.z,
+                22, 0.20, 0.25, 0.20, 0.035);
+        level.playSound(null, target.blockPosition(), SoundEvents.FIRE_EXTINGUISH,
+                SoundSource.PLAYERS, 1.0f, 0.55f);
     }
 
     private static void activateSphere(ServerPlayer player) {

@@ -47,7 +47,7 @@ Todos os valores-base podem ser alterados na seção `saiyan_form_multipliers` d
 
 ## Técnicas de Destruição — versão 1.5.3
 
-Ao alcançar **100 de maestria no Ultra Ego**, Hakai e Esfera da Destruição são aprendidos permanentemente e podem ser usados na forma base ou sobre qualquer outra transformação. Fora do Ultra Ego, eles dispensam o medidor de Ego, mas conservam custo de Ki, cooldown, progressão e proteções. No Ultra Ego, continuam exigindo o nível configurado do medidor.
+Ao alcançar **100 de maestria no Ultra Ego**, Hakai e Esfera da Destruição são aprendidos permanentemente e podem ser usados na forma base ou sobre qualquer outra transformação. Eles dispensam o medidor de Ego em qualquer forma, inclusive durante o próprio Ultra Ego, mas conservam custo de Ki, cooldown, progressão e proteções.
 
 ### Hakai — tecla H
 
@@ -151,6 +151,8 @@ Ao alcançar **100 de maestria no Instinto Superior Verdadeiro**, a tecla **K** 
 
 - God, Blue, Blue Evolved e Instinto Superior TRUE deixam de manter a aura forçada o tempo todo. A aura começa desligada e volta a obedecer ao controle normal do menu do DMZ.
 - God recebeu uma composição vermelho-dourada em duas camadas. Blue e Blue Evolved usam a camada nativa segura em tons ciano/azul com relâmpagos claros; a antiga camada azul-escura foi removida porque o sombreamento de carregamento podia dessaturar a pele do personagem.
+- Blue e Blue Evolved também ignoram o tingimento corporal secundário que o DragonMineZ aplica durante a carga de Ki; a aura continua visível, mas pele, cabelo e partes raciais preservam suas cores reais.
+- O Hakai cobre o segmento inicial da trajetória separadamente, impedindo que um alvo encostado no jogador seja atravessado pelo primeiro avanço rápido do projétil.
 
 ## Configuração
 
