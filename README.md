@@ -89,7 +89,8 @@ As teclas podem ser alteradas normalmente em **Opções → Controles → Ultra 
 - O MASTERED conserva 90% de esquiva e consome 1,8% do Ki máximo.
 - O TRUE possui 80% de esquiva, mas seu custo foi reduzido de 2,1% para 1,2% do Ki máximo.
 - O proc ofensivo exagerado do addon original é substituído por golpes de precisão menores e específicos para cada estágio.
-- Cada esquiva bem-sucedida abre uma janela de contra-ataque contra o agressor. O próximo acerto válido recebe o bônus, e contra-ataque nunca acumula com precisão.
+- Cada esquiva bem-sucedida marca o agressor e abre uma janela de contra-ataque. Um clique de ataque, mesmo mirando o ar, faz o personagem virar, perseguir esse agressor por até 48 blocos e golpear automaticamente quando alcançá-lo.
+- A aproximação e o golpe são controlados pelo servidor, não dependem do alvo sob a mira e respeitam colisões do movimento. Contra-ataque nunca acumula com precisão.
 
 | Forma | Chance de esquiva | Custo por esquiva | Precisão em maestria máxima |
 |---|---:|---:|---:|

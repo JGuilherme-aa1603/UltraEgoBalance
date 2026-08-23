@@ -13,6 +13,8 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = UltraBalanceTweaks.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class DestructionInputHandler {
+    private static boolean counterAttackWasDown;
+
     private DestructionInputHandler() {
     }
 
@@ -25,8 +27,14 @@ public final class DestructionInputHandler {
         ClientCounterState.tick();
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player == null || minecraft.screen != null) {
+            counterAttackWasDown = false;
             return;
         }
+        boolean counterAttackDown = minecraft.options.keyAttack.isDown();
+        if (ClientCounterState.active() && counterAttackDown && !counterAttackWasDown) {
+            BalanceNetwork.requestCounter();
+        }
+        counterAttackWasDown = counterAttackDown;
         while (DestructionKeybinds.HAKAI.consumeClick()) {
             BalanceNetwork.requestAbility(DestructionAbility.HAKAI);
         }
@@ -57,5 +65,6 @@ public final class DestructionInputHandler {
         ClientDestructionState.clear();
         ClientCounterState.clear();
         ClientEgoState.update(false, 0.0f);
+        counterAttackWasDown = false;
     }
 }
