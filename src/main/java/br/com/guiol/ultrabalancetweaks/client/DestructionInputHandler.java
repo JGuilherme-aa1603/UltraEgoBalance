@@ -64,7 +64,7 @@ public final class DestructionInputHandler {
     public static void loggedOut(ClientPlayerNetworkEvent.LoggingOut event) {
         ClientDestructionState.clear();
         ClientCounterState.clear();
-        ClientEgoState.update(false, 0.0f);
+        ClientEgoState.clear();
         counterAttackWasDown = false;
     }
 }

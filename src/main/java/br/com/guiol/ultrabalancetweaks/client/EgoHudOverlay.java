@@ -79,10 +79,7 @@ public final class EgoHudOverlay {
         int textColor = gauge >= 95.0f ? 0xFFF0B6 : 0xE9C8FF;
         graphics.drawCenteredString(minecraft.font, label, x + width / 2, y - 11, textColor);
 
-        double ratio = Math.max(0.0, Math.min(1.0, gauge / 100.0));
-        double basePower = BalanceConfig.ULTRA_EGO_MULTIPLIERS.kiPower().get();
-        double currentPower = basePower
-                + (BalanceConfig.EGO_MAX_PWR_MULTIPLIER.get() - basePower) * ratio;
+        double currentPower = ClientEgoState.powerMultiplier(gauge);
         String power = Component.translatable("gui.ultrabalancetweaks.power",
                 String.format(Locale.ROOT, "%.1f", currentPower)).getString();
         graphics.drawCenteredString(minecraft.font, power, x + width / 2, y - 21, 0xDAB6F3FF);

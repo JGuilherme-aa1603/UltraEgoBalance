@@ -10,7 +10,7 @@ Addon pessoal para Forge 1.20.1 criado para equilibrar as formas divinas de fim 
 
 O Instinto Superior representa controle, eficiência e sobrevivência. O Ultra Ego representa risco, resistência e poder destrutivo crescente. As duas escolhas têm forças bem diferentes, sem apagar a identidade mostrada no mangá de Dragon Ball Super.
 
-## Multiplicadores Saiyajin — versão 1.5.3
+## Multiplicadores Saiyajin — versão 1.5.9
 
 Os valores são aplicados e verificados em memória, no servidor e no cliente, apenas para a raça Saiyajin. Eles representam o multiplicador final de força, skill/velocidade, poder de Ki e resistência; o bônus oculto de até 35% por maestria do DMZ é neutralizado nessas formas para a tabela permanecer exata. Como o DragonMineZ calcula a resistência exibida pela média de DEF e STM, o addon ajusta os dois componentes ao mesmo valor da tabela. Os JSONs originais permanecem intactos.
 
@@ -24,7 +24,7 @@ Os valores são aplicados e verificados em memória, no servidor e no cliente, a
 | Super Saiyajin Blue | x12,0 | x12,0 | x12,0 | x6,0 |
 | Super Saiyajin Blue Evolved | x12,5 | x12,0 | x12,5 | x6,5 |
 | Legendary Super Saiyajin (Full Power) | x12,5 | x11,5 | x12,5 | x8,0 |
-| Ultra Ego | x11,0 | x10,5 | x11,0–13,0 | x7,0 |
+| Ultra Ego | x11,0 | x10,5 | x11,0–13,5 | x7,0 |
 | Beast | x14,0 | x13,0 | x14,0 | x7,5 |
 | Instinto Superior SIGN | x10,5 | x12,0 | x10,5 | x5,5 |
 | Instinto Superior MASTERED | x12,5 | x14,0 | x12,5 | x6,5 |
@@ -37,7 +37,8 @@ Todos os valores-base podem ser alterados na seção `saiyan_form_multipliers` d
 - Substitui o bônus baseado na vida atual por um medidor persistente de Ego de 0 a 100.
 - Dano recebido enche o medidor; por padrão, receber dano cumulativo equivalente a cerca de 60% da vida máxima chega a 100.
 - O multiplicador especial de dano cresce suavemente de x1,05 até x1,60.
-- O Poder de Ki cresce de x11,0 até x13,0 junto do medidor, sem substituir o multiplicador especial: com Ego cheio, ataques de Ki alcançam potencial efetivo próximo de x20,8.
+- O Poder de Ki cresce de x11,0 até x13,5 junto do medidor, sem substituir o multiplicador especial: com Ego cheio, ataques de Ki alcançam potencial efetivo próximo de x21,6.
+- O menu V projeta o Poder e o dano de Ki usando o medidor sincronizado pelo servidor; o valor acompanha o Ego sem alterar atributos salvos nem aplicar o bônus duas vezes.
 - A penetração de defesa cresce de 0% até 20%.
 - Todo dano recebido é reduzido em 15% enquanto a forma está ativa.
 - Cura normal remove apenas metade do percentual curado do medidor. A regeneração passiva rápida do DMZ não apaga imediatamente o progresso.

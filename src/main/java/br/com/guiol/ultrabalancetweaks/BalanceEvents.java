@@ -28,6 +28,9 @@ import org.unofficial.unofficialdmzaddon.network.AddonNetwork;
 public final class BalanceEvents {
     @SubscribeEvent
     public void onServerAboutToStart(ServerAboutToStartEvent event) {
+        if (BalanceConfig.migrateLegacyEgoPowerMultiplier()) {
+            UltraBalanceTweaks.LOGGER.info("Migrated the default full-Ego Power multiplier from 13.0 to 13.5");
+        }
         if (BalanceConfig.migrateLegacyHakaiBattlePowerThresholds()) {
             UltraBalanceTweaks.LOGGER.info(
                     "Migrated default Hakai Battle Power thresholds to 10,000 / 100,000 / 750,000 / 3,000,000");

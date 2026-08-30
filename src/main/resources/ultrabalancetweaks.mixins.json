@@ -9,7 +9,8 @@
     "DivineAuraPersistenceMixin"
   ],
   "client": [
-    "BlueAuraSkinTintMixin"
+    "BlueAuraSkinTintMixin",
+    "CharacterStatsScreenEgoMixin"
   ],
   "injectors": {
     "defaultRequire": 1

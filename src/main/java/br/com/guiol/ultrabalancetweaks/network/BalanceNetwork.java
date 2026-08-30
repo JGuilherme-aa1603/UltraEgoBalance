@@ -13,7 +13,7 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public final class BalanceNetwork {
-    private static final String PROTOCOL = "6";
+    private static final String PROTOCOL = "7";
     private static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
             .named(ResourceLocation.fromNamespaceAndPath(UltraBalanceTweaks.MOD_ID, "main"))
             .networkProtocolVersion(() -> PROTOCOL)
@@ -41,7 +41,11 @@ public final class BalanceNetwork {
     }
 
     public static void syncEgo(ServerPlayer player, boolean active, float gauge) {
-        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new EgoSyncPacket(active, gauge));
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new EgoSyncPacket(
+                active,
+                gauge,
+                BalanceConfig.ULTRA_EGO_MULTIPLIERS.kiPower().get().floatValue(),
+                BalanceConfig.EGO_MAX_PWR_MULTIPLIER.get().floatValue()));
     }
 
     public static void requestAbility(DestructionAbility ability) {

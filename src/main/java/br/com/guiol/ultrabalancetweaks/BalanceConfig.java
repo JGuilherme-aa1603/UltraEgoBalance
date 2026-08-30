@@ -103,7 +103,7 @@ public final class BalanceConfig {
                 "Runtime VIT multiplier. The DragonMineZ JSON is never overwritten.");
         EGO_STAMINA_DRAIN = commonDecimal("stamina_drain", 0.045, 0.0, 2.0,
                 "Runtime stamina drain. The DragonMineZ JSON is never overwritten.");
-        EGO_MAX_PWR_MULTIPLIER = commonDecimal("max_power_multiplier", 13.0, 1.0, 100.0,
+        EGO_MAX_PWR_MULTIPLIER = commonDecimal("max_power_multiplier", 13.5, 1.0, 100.0,
                 "Effective Ki Power multiplier at 100 Ego. It grows from the Ultra Ego form's base Power multiplier.");
         COMMON_BUILDER.pop();
 
@@ -249,6 +249,20 @@ public final class BalanceConfig {
         HAKAI_LEVEL_2_BATTLE_POWER.set(100000.0);
         HAKAI_LEVEL_3_BATTLE_POWER.set(750000.0);
         HAKAI_LEVEL_4_BATTLE_POWER.set(3000000.0);
+        COMMON_SPEC.save();
+        return true;
+    }
+
+    /**
+     * Moves only the previous default to the new balance value. A server owner who
+     * deliberately configured any other ceiling keeps that custom value.
+     */
+    public static boolean migrateLegacyEgoPowerMultiplier() {
+        if (Double.compare(EGO_MAX_PWR_MULTIPLIER.get(), 13.0) != 0) {
+            return false;
+        }
+
+        EGO_MAX_PWR_MULTIPLIER.set(13.5);
         COMMON_SPEC.save();
         return true;
     }
