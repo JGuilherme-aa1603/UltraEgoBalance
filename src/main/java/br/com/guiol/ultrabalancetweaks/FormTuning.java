@@ -12,6 +12,7 @@ public final class FormTuning {
     public static void apply() {
         int ultraEgoRegistries = applyRuntimeTuning();
         int saiyanForms = applyAttributeMultipliers();
+        applyInstinctAuraVisuals();
 
         UltraBalanceTweaks.LOGGER.info(
                 "Applied verified tuning to {} Ultra Ego race registries and {} Saiyan form entries",
@@ -115,5 +116,26 @@ public final class FormTuning {
             blueEvolved.setLightningColor("#C7F2FF");
             blueEvolved.setTintIntensity(0.0);
         }
+
+        applyInstinctAuraVisuals();
+    }
+
+    public static void applyInstinctAuraVisuals() {
+        applyTrueInstinctAuraShape(ConfigManager.getForm("saiyan", "ultrainstinct", "sign"));
+        applyTrueInstinctAuraShape(ConfigManager.getForm("saiyan", "ultrainstinct", "mastered"));
+        applyTrueInstinctAuraShape(ConfigManager.getForm("saiyan", "ultrainstinct", "true"));
+        applyTrueInstinctAuraShape(ConfigManager.getStackForm(InstinctTechnique.GROUP, InstinctTechnique.FORM));
+    }
+
+    static void applyTrueInstinctAuraShape(FormConfig.FormData form) {
+        if (form == null) {
+            return;
+        }
+        // TRUE's distinctive silhouette comes from these two native geometry
+        // layers. Keep each stage's own aura colours while sharing the shape.
+        form.setAuraType("god");
+        form.setAuraLayer(1);
+        form.setExtraAuraType("kakarot");
+        form.setExtraAuraLayer(2);
     }
 }

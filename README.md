@@ -153,6 +153,7 @@ Ao alcançar **100 de maestria no Instinto Superior Verdadeiro**, a tecla **K** 
 - God, Blue, Blue Evolved e Instinto Superior TRUE deixam de manter a aura forçada o tempo todo. A aura começa desligada e volta a obedecer ao controle normal do menu do DMZ.
 - God recebeu uma composição vermelho-dourada em duas camadas. Blue e Blue Evolved usam a camada nativa segura em tons ciano/azul com relâmpagos claros; a antiga camada azul-escura foi removida porque o sombreamento de carregamento podia dessaturar a pele do personagem.
 - Blue e Blue Evolved também ignoram o tingimento corporal secundário que o DragonMineZ aplica durante a carga de Ki; a aura continua visível, mas pele, cabelo e partes raciais preservam suas cores reais.
+- SIGN, MASTERED e a Técnica do Instinto usam a mesma silhueta nativa em duas camadas do TRUE. Cada estágio conserva suas próprias cores: cinza-prateado, branco-prateado e violeta, respectivamente.
 - O Hakai cobre o segmento inicial da trajetória separadamente, impedindo que um alvo encostado no jogador seja atravessado pelo primeiro avanço rápido do projétil.
 
 ## Configuração

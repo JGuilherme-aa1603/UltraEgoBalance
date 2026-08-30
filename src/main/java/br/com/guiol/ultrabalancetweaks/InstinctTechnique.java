@@ -69,6 +69,7 @@ public final class InstinctTechnique {
         technique.setPassiveMasteryEveryFiveSeconds(0.0);
         technique.setFormStackable(true);
         technique.setStackDrainMultiplier(1.0);
+        FormTuning.applyTrueInstinctAuraShape(technique);
 
         FormConfig group = new FormConfig();
         group.setConfigVersion(FormConfig.CURRENT_VERSION);
