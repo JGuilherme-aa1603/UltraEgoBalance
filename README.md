@@ -55,7 +55,8 @@ Ao alcançar **100 de maestria no Ultra Ego**, Hakai e Esfera da Destruição s�
 - Limites padrão, calibrados para a escala de PB do DragonMineZ 2.1.3: I = 10 mil PB/10 maestria; II = 100 mil/25; III = 750 mil/50; IV = 3 milhões/100. Todos os limites de PB são configuráveis.
 - O poder efetivo compara o PB do usuário com o PB do alvo e recebe até 50% de bônus com a maestria. Alvos muito superiores resistem ou recebem dano parcial; ter o nível IV não garante apagar qualquer adversário.
 - Ao alcançar 100 de maestria no Ultra Ego, Hakai e Esfera da Destruição deixam de exigir Ego em qualquer forma, inclusive durante o próprio Ultra Ego. A maestria própria do Hakai continua controlando seus quatro níveis; custo de Ki e cooldown permanecem ativos.
-- Nível I apaga itens soltos e projéteis físicos; nível II também apaga projéteis de Ki; nível III atinge seres vivos; nível IV pode apagar criaturas elegíveis sem deixar drops quando o usuário é suficientemente superior.
+- Nível I apaga itens soltos e projéteis físicos; nível II também apaga projéteis de Ki. Ambos podem ser treinados em seres vivos, mas são deliberadamente não letais: o nível I remove no máximo 25% da vida e preserva ao menos 50%; o nível II remove no máximo 50% e preserva ao menos 20%.
+- Cada acerto de treinamento concede pelo menos 1 ponto de maestria. O nível III libera Hakai letal contra seres vivos; o nível IV pode apagar criaturas elegíveis sem deixar drops quando o usuário é suficientemente superior.
 - Exige 70 pontos de Ego e consome 35% do Ki máximo.
 - Alcance de 24 blocos e cooldown de 30 segundos.
 - Usa um projétil de Ki nativo do DragonMineZ, com shader, cores, colisão, som e impacto do próprio mod.

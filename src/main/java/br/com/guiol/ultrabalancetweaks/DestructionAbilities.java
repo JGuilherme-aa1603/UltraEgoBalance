@@ -31,6 +31,7 @@ import java.util.Optional;
 
 public final class DestructionAbilities {
     private static final String HAKAI_MARKER = UltraBalanceTweaks.MOD_ID + ":hakai_projectile";
+    private static final String HAKAI_LEVEL_MARKER = UltraBalanceTweaks.MOD_ID + ":hakai_level";
     private static final String SPHERE_MARKER = UltraBalanceTweaks.MOD_ID + ":destruction_sphere";
     public static final String HAKAI_ERASED_MARKER = UltraBalanceTweaks.MOD_ID + ":hakai_erased";
     private static final String HAKAI_MASTERY_GRANTED = UltraBalanceTweaks.MOD_ID + ":hakai_mastery_granted";
@@ -74,10 +75,16 @@ public final class DestructionAbilities {
         LivingEntity target = event.getEntity();
         if (projectile.getPersistentData().getBoolean(HAKAI_MARKER)) {
             ServerPlayer caster = projectile.getOwner() instanceof ServerPlayer player ? player : null;
-            int level = caster == null ? 3 : HakaiProgressData.level(caster);
+            int level = projectile.getPersistentData().contains(HAKAI_LEVEL_MARKER)
+                    ? projectile.getPersistentData().getInt(HAKAI_LEVEL_MARKER)
+                    : caster == null ? 3 : HakaiProgressData.level(caster);
             double powerRatio = caster == null ? 1.0
                     : HakaiProgressData.effectivePower(caster) / HakaiProgressData.battlePower(target);
             float damage = scaledHakaiDamage(event.getAmount(), target, powerRatio);
+
+            if (level < 3) {
+                damage = trainingHakaiDamage(damage, target, level);
+            }
 
             boolean trueErasure = level >= 4 && canExecute(target) && powerRatio >= 1.5
                     && (powerRatio >= 2.0 || target.getRandom().nextDouble()
@@ -94,7 +101,9 @@ public final class DestructionAbilities {
             if (caster != null && !projectile.getPersistentData().getBoolean(HAKAI_MASTERY_GRANTED)) {
                 projectile.getPersistentData().putBoolean(HAKAI_MASTERY_GRANTED, true);
                 double difficulty = Math.max(0.5, Math.min(2.0, 1.0 / Math.max(0.25, powerRatio)));
-                HakaiProgressData.addMastery(caster, BalanceConfig.HAKAI_MASTERY_GAIN.get() * difficulty);
+                double naturalGain = BalanceConfig.HAKAI_MASTERY_GAIN.get() * difficulty;
+                double minimumGain = level < 3 ? 1.0 : 0.5;
+                HakaiProgressData.addMastery(caster, Math.max(minimumGain, naturalGain));
             }
             event.setAmount(damage);
         } else if (projectile.getPersistentData().getBoolean(SPHERE_MARKER)) {
@@ -163,11 +172,6 @@ public final class DestructionAbilities {
             message(player, "message.ultrabalancetweaks.no_target");
             return;
         }
-        if (hakaiLevel < 3) {
-            player.displayClientMessage(Component.translatable(
-                    "message.ultrabalancetweaks.hakai_requires_level", "III"), true);
-            return;
-        }
         if (isProtectedTarget(player, target)) {
             message(player, "message.ultrabalancetweaks.protected_target");
             return;
@@ -185,6 +189,7 @@ public final class DestructionAbilities {
         hakai.setFiring(true);
         hakai.setMaxLife(45);
         hakai.getPersistentData().putBoolean(HAKAI_MARKER, true);
+        hakai.getPersistentData().putInt(HAKAI_LEVEL_MARKER, hakaiLevel);
 
         Vec3 look = player.getLookAngle().normalize();
         Vec3 start = player.getEyePosition().add(look.scale(0.9));
@@ -193,7 +198,10 @@ public final class DestructionAbilities {
                 hakai.getKiSpeed(), 0.0f);
         player.level().addFreshEntity(hakai);
         resolvePointBlankHakai(player, target, hakai, damage, start, look);
-        player.displayClientMessage(Component.translatable("message.ultrabalancetweaks.hakai_launched",
+        String launchMessage = hakaiLevel < 3
+                ? "message.ultrabalancetweaks.hakai_training_launched"
+                : "message.ultrabalancetweaks.hakai_launched";
+        player.displayClientMessage(Component.translatable(launchMessage,
                 target.getDisplayName(), HakaiProgressData.roman(hakaiLevel)), true);
     }
 
@@ -364,6 +372,15 @@ public final class DestructionAbilities {
                 ? BalanceConfig.HAKAI_PLAYER_DAMAGE_FLOOR.get().floatValue()
                 : BalanceConfig.HAKAI_DAMAGE_FLOOR.get().floatValue();
         return Math.max(Math.max(original, minimum), maxHealth * floorRatio);
+    }
+
+    private static float trainingHakaiDamage(float fullDamage, LivingEntity target, int level) {
+        float maxHealth = Math.max(1.0f, target.getMaxHealth());
+        float remainingHealth = level <= 1 ? Math.max(1.0f, maxHealth * 0.50f)
+                : Math.max(1.0f, maxHealth * 0.20f);
+        float nonLethalLimit = Math.max(0.0f, target.getHealth() - remainingHealth);
+        float perHitLimit = maxHealth * (level <= 1 ? 0.25f : 0.50f);
+        return Math.max(0.0f, Math.min(fullDamage, Math.min(nonLethalLimit, perHitLimit)));
     }
 
     private static boolean isProtectedTarget(ServerPlayer caster, LivingEntity target) {
